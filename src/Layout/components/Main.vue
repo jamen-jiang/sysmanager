@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import "../assets/base.css";
+import "@/styles/base.css";
 import { mapState } from "vuex";
 export default {
   props: {},

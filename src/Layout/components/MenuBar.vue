@@ -27,7 +27,7 @@
 <script>
 import { mapState } from "vuex";
 import { mapMutations } from "vuex";
-import menutree from "@/components/menutree";
+import menutree from "../../components/menutree";
 export default {
   name: "MenuBar",
   props: {},

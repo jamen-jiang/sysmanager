@@ -11,10 +11,7 @@
 </template>
 
 <script>
-import MenuBar from "./MenuBar";
-import HeadBar from "./HeadBar";
-import Main from "./Main";
-import FootBar from "./FootBar";
+import { HeadBar, MenuBar, Main, FootBar } from "./components";
 export default {
   props: {},
   data() {
@@ -26,19 +23,21 @@ export default {
   watch: {},
   methods: {},
   components: {
-    MenuBar,
     HeadBar,
+    MenuBar,
     Main,
     FootBar
   }
 };
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
 </style>
-<style>
-#sysmain .el-menu {
-  background-color: #ebf1f6;
-  border: 0px;
+<style lang='scss'>
+#sysmain {
+  .el-menu {
+    background-color: #ebf1f6;
+    border: 0px;
+  }
 }
 </style>

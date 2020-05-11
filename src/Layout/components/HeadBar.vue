@@ -1,7 +1,7 @@
 <template>
   <el-header id="header">
     <div class="logo-group">
-      <img src="../assets/logo.png" style="height: 60px;" />
+      <img src="../../assets/logo.png" style="height: 60px;" />
     </div>
     <div class="toggle-btn" @click="toggle">
       <i class="iconfont icon-bars"></i>
@@ -23,7 +23,7 @@
 
 <script>
 import { mapState } from "vuex";
-import { setRouter } from "@/assets/js/common.js";
+import { setRouter } from "@/utils/common.js";
 export default {
   name: "HeadBar",
   props: {},
@@ -119,12 +119,13 @@ export default {
 @font-face {
   /* Unicode  */
   font-family: "iconfont";
-  src: url("../assets/iconfont/iconfont.eot");
-  src: url("../assets/iconfont/iconfont.eot?#iefix") format("embedded-opentype"),
-    url("../assets/iconfont/iconfont.woff2") format("woff2"),
-    url("../assets/iconfont/iconfont.woff") format("woff"),
-    url("../assets/iconfont/iconfont.ttf") format("truetype"),
-    url("../assets/iconfont/iconfont.svg#iconfont") format("svg");
+  src: url("../../icons/iconfont/iconfont.eot");
+  src: url("../../icons/iconfont/iconfont.eot?#iefix")
+      format("embedded-opentype"),
+    url("../../icons/iconfont/iconfont.woff2") format("woff2"),
+    url("../../icons/iconfont/iconfont.woff") format("woff"),
+    url("../../icons/iconfont/iconfont.ttf") format("truetype"),
+    url("../../icons/iconfont/iconfont.svg#iconfont") format("svg");
 }
 .iconfont {
   font-family: "iconfont" !important;

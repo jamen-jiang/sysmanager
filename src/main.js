@@ -30,28 +30,29 @@ router.beforeEach((to, from, next) => {
       });
     } else {
       //动态生成路由
-      if (store.state.permission != {}) {
+
+      if (store.state.permission.permission != {}) {
         let permission = localStorage.getItem("permission");
-        store.commit("setPermission", JSON.parse(permission));
+        store.commit("permission/setPermission", JSON.parse(permission));
         //setRouter(store.state.menus);
       } else {
         let flag = false; //判断是否页面中是否已经存在该路由下的tab页
         //options记录当前页面中已存在的tab页
-        for (let tab of store.state.tabs) {
+        for (let tab of store.state.tab.tabs) {
           //用名称匹配，如果存在即将对应的tab页设置为active显示桌面前端
           if (tab.name === to.name) {
             flag = true;
-            store.commit("tab_active", to.path);
+            store.commit("tab/tab_active", to.path);
             break;
           }
         }
         //如果不存在，则新增tab页，再将新增的tab页设置为active显示在桌面前端
         if (!flag) {
-          store.commit("tab_add", {
+          store.commit("tab/tab_add", {
             route: to.path,
             name: to.name
           });
-          store.commit("tab_active", to.path);
+          store.commit("tab/tab_active", to.path);
         }
       }
       next();

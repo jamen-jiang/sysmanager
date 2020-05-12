@@ -8,48 +8,23 @@
             <el-button type="text" class="el-btn-save" @click="saveOperate()">保存</el-button>
           </div>
           <div class="box-role-list">
-            <div
-              class="text item role-item"
-              v-for="r in roles"
-              :key="r.Id"
-              :class="{'active':roleId == r.Id}"
-              @click="setTabContent(r.Id)"
-            >{{ r.Name }}</div>
+            <div class="text item role-item" v-for="r in roles" :key="r.Id" :class="{ active: roleId == r.Id }" @click="setTabContent(r.Id)">
+              {{ r.Name }}
+            </div>
           </div>
         </el-card>
       </el-col>
       <el-col :span="19" class="main-container-content-col">
-        <el-tabs
-          v-model="activeName"
-          @tab-click="handleClick"
-          type="border-card"
-          class="tab-container"
-          body-style="height: 100%;"
-        >
+        <el-tabs v-model="activeName" @tab-click="handleClick" type="border-card" class="tab-container" body-style="height: 100%;">
           <el-tab-pane label="菜单权限" name="menurole" class="pane-menu">
             <div class="custom-tree-container">
-              <el-tree
-                :data="menus.list"
-                show-checkbox
-                node-key="Id"
-                default-expand-all
-                :expand-on-click-node="false"
-                :props="{children:'children',label:'Name'}"
-                :default-checked-keys="menus.selectList"
-                :indent="40"
-                ref="menuTree"
-                :check-strictly="true"
-              >
+              <el-tree :data="menus.list" show-checkbox node-key="Id" default-expand-all :expand-on-click-node="false" :props="{ children: 'children', label: 'Name' }" :default-checked-keys="menus.selectList" :indent="40" ref="menuTree" :check-strictly="true">
                 <div class="custom-tree-node" slot-scope="{ node, data }">
-                  <span style="width:150px;" @click="getdata1(data)">{{ node.label }}</span>
+                  <span style="width:150px;" @click="getdata1(data)">{{
+                    node.label
+                  }}</span>
                   <el-checkbox-group v-if="data.PId > 0" v-model="operates.selectList">
-                    <el-checkbox
-                      :label="m.Id"
-                      v-for="m in getMenuOperate(data.Id)"
-                      :key="m.Id"
-                      border
-                      size="mini"
-                    >{{m.Name}}</el-checkbox>
+                    <el-checkbox :label="m.Id" v-for="m in getMenuOperate(data.Id)" :key="m.Id" border size="mini">{{ m.Name }}</el-checkbox>
                   </el-checkbox-group>
                 </div>
               </el-tree>
@@ -57,13 +32,9 @@
           </el-tab-pane>
           <el-tab-pane label="角色分配" name="userrole">
             <div class="user-group">
-              <el-tag
-                v-for="a in accounts.list"
-                type="success"
-                :key="a.Id"
-                :effect="accounts.selectList.indexOf(a.Id) != -1 ? 'dark' : 'plain'"
-                @click="userSelect(a.Id)"
-              >{{a.Name}}</el-tag>
+              <el-tag v-for="a in accounts.list" type="success" :key="a.Id" :effect="
+                  accounts.selectList.indexOf(a.Id) != -1 ? 'dark' : 'plain'
+                " @click="userSelect(a.Id)">{{ a.Name }}</el-tag>
             </div>
           </el-tab-pane>
         </el-tabs>
@@ -192,8 +163,8 @@ export default {
   },
   components: {},
   computed: {
-    getMenuOperate: function() {
-      return function(menuId) {
+    getMenuOperate: function () {
+      return function (menuId) {
         var list = [];
         this.operates.list.forEach(operate => {
           if (operate.MenuId == menuId) list.push(operate);
@@ -203,23 +174,23 @@ export default {
     }
   },
   //实例刚在内存中被创建出来,此时,还没有初始化好 data 和 methods 属性
-  beforeCreate() {},
+  beforeCreate() { },
   //实例已经在内存中创建OK,此时 data 和 methods 已经创建OK,此时还没有开始 编译模板
-  created() {},
+  created() { },
   //此时已经完成了模板的编译,但是还没有挂载到页面中
-  beforeMount() {},
+  beforeMount() { },
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
   mounted() {
     this.getRoles();
   },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
-  beforeUpdate() {},
+  beforeUpdate() { },
   //实例更新完毕之后调用此函数,此时 data 中的状态值 和 界面上显示的数据,都已经完成了更新,界面已经被重新渲染好了!
-  updated() {},
+  updated() { },
   //Vue实例销毁之前调用.在这一步,Vue实例仍然完全可用
-  beforeDestroy() {},
+  beforeDestroy() { },
   //Vue实例销毁后调用.调用后,Vue实例指示的所有东西都会解绑定,所有的事件监听器会被移除,所有的子实例也会被销毁
-  destroyed() {},
+  destroyed() { },
   watch: {}
 };
 </script>

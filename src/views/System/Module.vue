@@ -20,16 +20,7 @@
           </el-button-group>
         </el-col>
     </el-row>-->
-    <el-table
-      ref="table"
-      :data="tree"
-      style="width:100%"
-      row-key="Name"
-      height="95%"
-      :tree-props="{ children: 'Children', hasChildren: 'hasChildren' }"
-      highlight-current-row
-      @row-click="setCurrentRow"
-    >
+    <el-table ref="table" :data="tree" style="width:100%" row-key="Name" height="95%" :tree-props="{ children: 'Children', hasChildren: 'hasChildren' }" highlight-current-row @row-click="setCurrentRow">
       <el-table-column prop="Name" label="模块名称" align="left" width="250">
         <template slot-scope="scope">
           <i :class="scope.row.Icon"></i>
@@ -48,12 +39,7 @@
       </el-table-column>
       <el-table-column prop="Id" label="操作" align="center" width="300" fixed="right">
         <template slot-scope="scope">
-          <el-button
-            type="primary"
-            @click="editUser(scope.row.Id)"
-            size="mini"
-            v-if="scope.row.Operates"
-          >查看操作库</el-button>
+          <el-button type="primary" @click="editUser(scope.row.Id)" size="mini" v-if="scope.row.Operates">查看操作库</el-button>
           <!-- <el-button type="danger" size="mini">删除</el-button> -->
         </template>
       </el-table-column>
@@ -106,7 +92,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="operateDialogVisible = false" size="mini">取 消</el-button>
+        <el-button @click="operateDialogVisible = false" size="mini">取 消
+        </el-button>
         <el-button type="primary" @click="submitForm('operate')" size="mini">确 定</el-button>
       </div>
     </el-dialog>
@@ -161,14 +148,14 @@ export default {
       formLabelWidth: "120px",
       rules: {
         Name: [{ required: true, message: "请输入按钮名称", trigger: "blur" }],
-        Code: [{ required: true, message: "请输入按钮代码", trigger: "blur" }]
+        Code: [{ required: true, message: "请输入按钮代码", trigger: "blur" }],
       },
       moduleRules: {
-        Name: [{ required: true, message: "请输入模块名称", trigger: "blur" }]
+        Name: [{ required: true, message: "请输入模块名称", trigger: "blur" }],
       },
       menuRules: {
-        Name: [{ required: true, message: "请输入菜单名称", trigger: "blur" }]
-      }
+        Name: [{ required: true, message: "请输入菜单名称", trigger: "blur" }],
+      },
     };
   },
   methods: {
@@ -176,13 +163,13 @@ export default {
       debugger;
     },
     getModules() {
-      this.$api.module.list().then(res => {
+      this.$api.module.list().then((res) => {
         this.tree = res.Data.Tree;
       });
     },
     editModule(id) {
       if (this.$refs["module"]) this.$refs["module"].resetFields();
-      this.$api.module.detail(id).then(res => {
+      this.$api.module.detail(id).then((res) => {
         this.module = res.Data;
         this.moduleDialogVisible = true;
       });
@@ -193,10 +180,10 @@ export default {
       this.moduleDialogVisible = true;
     },
     saveModule(formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           var params = this.module;
-          this.$api.module.save(params).then(res => {
+          this.$api.module.save(params).then((res) => {
             this.$message("保存成功");
             this.menuDialogVisible = false;
           });
@@ -214,7 +201,7 @@ export default {
     getOperates(data, node, e) {
       this.currentMenu = data;
       var params = { params: { menuId: this.currentMenu.Id } };
-      getOperates(params).then(res => {
+      getOperates(params).then((res) => {
         this.operates = res.Data;
       });
     },
@@ -226,23 +213,23 @@ export default {
       if (!this.currentMenu.Id) {
         this.$message({
           message: "没有选中菜单项",
-          type: "warning"
+          type: "warning",
         });
         return;
       }
       var params = { params: { id: this.currentMenu.Id } };
       var _this = this;
-      getMenu(params).then(res => {
+      getMenu(params).then((res) => {
         this.menu = res.Data;
         this.menuDialogVisible = true;
       });
     },
     saveMenu(formName) {
       var _this = this;
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           var params = _this.menu;
-          saveMenu(params).then(res => {
+          saveMenu(params).then((res) => {
             this.$message("保存成功");
             this.menuDialogVisible = false;
           });
@@ -256,7 +243,7 @@ export default {
       if (!this.currentMenu.PId || this.currentMenu.PId == 0) {
         this.$message({
           message: "没有选中一行或者不是菜单项",
-          type: "warning"
+          type: "warning",
         });
         return;
       }
@@ -268,24 +255,24 @@ export default {
       if (!this.currentOperate.Id) {
         this.$message({
           message: "没有选中一行",
-          type: "warning"
+          type: "warning",
         });
         return;
       }
       if (this.$refs["operate"]) this.$refs["operate"].resetFields();
       var params = { params: { operateId: this.currentOperate.Id } };
-      getOperate(params).then(res => {
+      getOperate(params).then((res) => {
         this.operate = res.Data;
         this.operateDialogVisible = true;
       });
     },
     submitForm(formName) {
       var _this = this;
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate((valid) => {
         if (valid) {
           _this.operate.MenuId = _this.menu.Id;
           var params = _this.operate;
-          saveOperate(params).then(res => {
+          saveOperate(params).then((res) => {
             this.$message("保存成功");
           });
           this.operateDialogVisible = false;
@@ -294,31 +281,31 @@ export default {
           return false;
         }
       });
-    }
+    },
   },
   components: {
-    ktbutton
+    ktbutton,
   },
   computed: {},
   //实例刚在内存中被创建出来,此时,还没有初始化好 data 和 methods 属性
-  beforeCreate() {},
+  beforeCreate() { },
   //实例已经在内存中创建OK,此时 data 和 methods 已经创建OK,此时还没有开始 编译模板
-  created() {},
+  created() { },
   //此时已经完成了模板的编译,但是还没有挂载到页面中
-  beforeMount() {},
+  beforeMount() { },
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
   mounted() {
     this.getModules();
   },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
-  beforeUpdate() {},
+  beforeUpdate() { },
   //实例更新完毕之后调用此函数,此时 data 中的状态值 和 界面上显示的数据,都已经完成了更新,界面已经被重新渲染好了!
-  updated() {},
+  updated() { },
   //Vue实例销毁之前调用.在这一步,Vue实例仍然完全可用
-  beforeDestroy() {},
+  beforeDestroy() { },
   //Vue实例销毁后调用.调用后,Vue实例指示的所有东西都会解绑定,所有的事件监听器会被移除,所有的子实例也会被销毁
-  destroyed() {},
-  watch: {}
+  destroyed() { },
+  watch: {},
 };
 </script>
 

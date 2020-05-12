@@ -8,12 +8,7 @@
     </div>
     <el-menu mode="horizontal">
       <el-menu-item @click="selecthome">首页</el-menu-item>
-      <el-menu-item
-        v-for="(m,index) in modules"
-        :key="m.Id"
-        :index="index+''"
-        @click="select(m.Id)"
-      >
+      <el-menu-item v-for="(m,index) in modules" :key="m.Id" :index="index+''" @click="select(m.Id)">
         <i :class="m.Icon"></i>
         <span slot="title">{{m.Name}}</span>
       </el-menu-item>
@@ -43,40 +38,40 @@ export default {
       if (this.menuTree.length > 0) {
         setRouter(this.menuTree);
       }
-      this.$store.permission.commit("get_menus", this.menuTree);
+      this.$store.commit("permission/get_menus", this.menuTree);
     },
     selecthome() {
       this.$router.push({ path: "/" });
-      this.$store.permission.commit("get_menus", []);
+      this.$store.commit("permission/get_menus", []);
     },
     toggle() {
-      this.$store.permission.commit("set_MenuCollapse", !this.isCollapse);
+      this.$store.commit("permission/set_MenuCollapse", !this.isCollapse);
     }
   },
   components: {},
   computed: {
     ...mapState({
-      modules: state => state.permission.ModuleTreeList,
-      menus: state => state.permission.MenuTreeList,
-      isCollapse: state => state.menuIsCollapse
+      modules: state => state.permission.permission.ModuleTreeList,
+      menus: state => state.permission.permission.MenuTreeList,
+      isCollapse: state => state.permission.menuIsCollapse
     })
   },
   //实例刚在内存中被创建出来,此时,还没有初始化好 data 和 methods 属性
-  beforeCreate() {},
+  beforeCreate() { },
   //实例已经在内存中创建OK,此时 data 和 methods 已经创建OK,此时还没有开始 编译模板
-  created() {},
+  created() { },
   //此时已经完成了模板的编译,但是还没有挂载到页面中
-  beforeMount() {},
+  beforeMount() { },
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
-  mounted() {},
+  mounted() { },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
-  beforeUpdate() {},
+  beforeUpdate() { },
   //实例更新完毕之后调用此函数,此时 data 中的状态值 和 界面上显示的数据,都已经完成了更新,界面已经被重新渲染好了!
-  updated() {},
+  updated() { },
   //Vue实例销毁之前调用.在这一步,Vue实例仍然完全可用
-  beforeDestroy() {},
+  beforeDestroy() { },
   //Vue实例销毁后调用.调用后,Vue实例指示的所有东西都会解绑定,所有的事件监听器会被移除,所有的子实例也会被销毁
-  destroyed() {},
+  destroyed() { },
   watch: {}
 };
 </script>
@@ -100,21 +95,7 @@ export default {
   color: #409eff;
   background: hsla(0, 0%, 100%, 0.5);
 }
-.toggle-btn {
-  height: 60px;
-  width: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-.toggle-btn i {
-  font-size: 23px;
-  color: #606266;
-}
-.toggle-btn:hover i {
-  color: #409eff !important;
-}
+
 /* 下面的样式可以单独写，然后引入 */
 @font-face {
   /* Unicode  */

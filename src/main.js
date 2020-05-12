@@ -5,8 +5,9 @@ import store from "./store";
 import ElementUI from "element-ui";
 import "element-ui/lib/theme-chalk/index.css";
 import Cookies from "js-cookie";
-import "@/assets/iconfont/iconfont.css";
+import "@/icons/iconfont/iconfont.css";
 import api from './api' // 导入api接口
+import '@/styles/index.scss' // global css
 
 Vue.prototype.HOST = "/api";
 Vue.config.productionTip = false;
@@ -30,7 +31,6 @@ router.beforeEach((to, from, next) => {
       });
     } else {
       //动态生成路由
-
       if (store.state.permission.permission != {}) {
         let permission = localStorage.getItem("permission");
         store.commit("permission/setPermission", JSON.parse(permission));

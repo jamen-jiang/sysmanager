@@ -14,10 +14,18 @@ module.exports = {
         changeOrigin: true,
         ws: true,
         pathRewrite: {
-          "^/apis": "" //请求的时候使用这个api就可以
-        }
-      }
-    }
+          '^/apis': '', //请求的时候使用这个api就可以
+        },
+      },
+    },
   },
-  lintOnSave: true
-}
+  css: {
+    loaderOptions: {
+      // 设置 scss 公用变量文件
+      sass: {
+        prependData: "@import '~@/styles/variables.scss';",
+      },
+    },
+  },
+  lintOnSave: true,
+};

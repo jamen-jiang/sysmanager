@@ -1,0 +1,82 @@
+@import '@/styles/variables.scss';
+
+html,
+body,
+#app,
+.el-container {
+  /*设置内部填充为0，几个布局元素之间没有间距*/
+  padding: 0px;
+  /*外部间距也是如此设置*/
+  margin: 0px;
+  /*统一设置高度为100%*/
+  height: 100%;
+}
+#app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 12px;
+}
+.jyz-layout {
+  .jyz-header {
+    padding: 0px;
+    display: flex;
+    align-items: center;
+    .el-menu {
+      background-color: transparent;
+      border-bottom: 0px;
+    }
+    .logo-group {
+      width: 200px;
+      text-align: center;
+    }
+    .toggle-btn {
+      height: 60px;
+      width: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .toggle-btn i {
+      font-size: 23px;
+      color: #606266;
+    }
+    .toggle-btn:hover i {
+      color: #409eff !important;
+    }
+  }
+  .jyz-middle {
+    .el-menu {
+      background-color: transparent;
+      border-right: 0px;
+    }
+    .el-main {
+      padding: 0px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      .el-tabs {
+        display: flex;
+        flex-direction: column;
+        border: 0px;
+        .el-tabs__content {
+          flex: 1;
+          border: 1px solid#cfd7e5;
+          border-top: none;
+          border-bottom: none;
+          display: none;
+        }
+        .el-tabs__nav {
+          overflow: hidden;
+          border: 1px solid#cfd7e5;
+          border-bottom: 0px;
+          border-radius: 4px 4px 0px 0px;
+        }
+        & > .el-tabs__header .el-tabs__item:first-child {
+          border-left: 0px;
+        }
+      }
+    }
+  }
+}

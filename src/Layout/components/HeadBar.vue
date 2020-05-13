@@ -77,39 +77,19 @@ export default {
 </script>
 
 <style scoped>
-#header {
-  padding: 0px;
-  display: flex;
-  align-items: center;
-}
-.logo-group {
-  width: 200px;
-  text-align: center;
-}
-.el-menu--horizontal > .el-menu-item {
-  color: #606266;
-}
-#header .el-menu--horizontal > .el-menu-item.is-active,
-#header .el-menu--horizontal .el-menu-item:hover {
-  border-bottom: 0px;
-  color: #409eff;
-  background: hsla(0, 0%, 100%, 0.5);
-}
-
 /* 下面的样式可以单独写，然后引入 */
 @font-face {
   /* Unicode  */
-  font-family: "iconfont";
-  src: url("../../icons/iconfont/iconfont.eot");
-  src: url("../../icons/iconfont/iconfont.eot?#iefix")
-      format("embedded-opentype"),
-    url("../../icons/iconfont/iconfont.woff2") format("woff2"),
-    url("../../icons/iconfont/iconfont.woff") format("woff"),
-    url("../../icons/iconfont/iconfont.ttf") format("truetype"),
-    url("../../icons/iconfont/iconfont.svg#iconfont") format("svg");
+  font-family: 'iconfont';
+  src: url('../../icons/iconfont/iconfont.eot');
+  src: url('../../icons/iconfont/iconfont.eot?#iefix') format('embedded-opentype'),
+    url('../../icons/iconfont/iconfont.woff2') format('woff2'),
+    url('../../icons/iconfont/iconfont.woff') format('woff'),
+    url('../../icons/iconfont/iconfont.ttf') format('truetype'),
+    url('../../icons/iconfont/iconfont.svg#iconfont') format('svg');
 }
 .iconfont {
-  font-family: "iconfont" !important;
+  font-family: 'iconfont' !important;
   font-size: 1em;
   font-style: normal;
   -webkit-font-smoothing: antialiased;

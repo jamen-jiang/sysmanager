@@ -1,10 +1,10 @@
 <template>
-  <el-container class="is-vertical jyz-wrapper">
+  <el-container class="is-vertical jyz-layout">
     <HeadBar class="jyz-header"></HeadBar>
-    <el-container>
-      <MenuBar class="jyz-menu"></MenuBar>
+    <el-container class="jyz-middle">
+      <MenuBar></MenuBar>
       <el-container>
-        <Main class="jyz-main"></Main>
+        <Main></Main>
       </el-container>
     </el-container>
   </el-container>
@@ -30,14 +30,6 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped></style>
 <style lang="scss">
-.jyz-wrapper {
-  background: #ebf1f6;
-  .el-menu {
-    background-color: #ebf1f6;
-    border: 0px;
-  }
-}
+@import '@/styles/theme/register.scss';
 </style>

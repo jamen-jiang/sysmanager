@@ -193,12 +193,9 @@ const errorHandle = (statusCode, message) => {
       Message.error('权限不足,请联系管理员');
       break;
     case 3:
-      Message.error('系统异常');
+      Message.error(message);
       break;
     case 4:
-      Message.error('系统异常');
-      break;
-    case 2:
       Message.error('系统异常');
       break;
     default:

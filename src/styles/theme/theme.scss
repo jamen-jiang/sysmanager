@@ -36,27 +36,27 @@
         transition: border-top-color 0s;
         color: $theme-header-item-color;
         background: $theme-header-item-background-color;
-        i.fa {
+        i {
           color: inherit;
         }
         &:hover {
           color: $theme-header-item-color-hover;
           background: $theme-header-item-background-color-hover;
-          i.fa {
+          i {
             color: inherit;
           }
         }
         &:focus {
           color: $theme-header-item-color-focus;
           background: $theme-header-item-background-color-focus;
-          i.fa {
+          i {
             color: inherit;
           }
         }
         &.is-active {
           color: $theme-header-item-color-active;
           background: $theme-header-item-background-color-active;
-          i.fa {
+          i {
             color: inherit;
           }
         }
@@ -66,7 +66,7 @@
           .el-submenu__title {
             color: $theme-header-item-color-active;
             background: $theme-header-item-background-color-active;
-            i.fa {
+            i {
               color: inherit;
             }
           }
@@ -75,7 +75,7 @@
           transition: border-top-color 0s;
           color: $theme-header-item-color;
           background: $theme-header-item-background-color;
-          i.fa {
+          i {
             color: inherit;
           }
           .el-submenu__icon-arrow {
@@ -84,7 +84,7 @@
           &:hover {
             color: $theme-header-item-color-hover;
             background: $theme-header-item-background-color-hover;
-            i.fa {
+            i {
               color: inherit;
             }
             .el-submenu__icon-arrow {
@@ -94,7 +94,7 @@
           &:focus {
             color: $theme-header-item-color-focus;
             background: $theme-header-item-background-color-focus;
-            i.fa {
+            i {
               color: inherit;
             }
             .el-submenu__icon-arrow {
@@ -158,6 +158,43 @@
           .el-submenu__icon-arrow {
             color: $theme-aside-item-color-hover;
           }
+        }
+      }
+    }
+    .jyz-middle-main {
+      .jyz-middle-main-header {
+        .el-tabs__header.is-top {
+          border-bottom-color: $theme-multiple-page-control-border-color;
+        }
+        .el-tabs__nav {
+          border-color: $theme-multiple-page-control-border-color;
+          .el-tabs__item {
+            color: $theme-multiple-page-control-color;
+            background-color: $theme-multiple-page-control-background-color;
+            border-left-color: $theme-multiple-page-control-border-color;
+            &:first-child {
+              border-left: none;
+              &:hover {
+                padding: 0px 20px;
+              }
+            }
+          }
+          .el-tabs__item.is-active {
+            color: $theme-multiple-page-control-color-active;
+            background-color: $theme-multiple-page-control-background-color-active;
+            border-bottom-color: $theme-multiple-page-control-border-color-active;
+          }
+        }
+        %el-tabs__nav {
+          font-size: 20px;
+        }
+        .el-tabs__nav-prev {
+          @extend %el-tabs__nav;
+          color: $theme-multiple-page-control-nav-prev-color;
+        }
+        .el-tabs__nav-next {
+          @extend %el-tabs__nav;
+          color: $theme-multiple-page-control-nav-next-color;
         }
       }
     }

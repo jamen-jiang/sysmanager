@@ -1,9 +1,11 @@
 <template>
-  <el-main id="main">
-    <el-tabs id="tabs" type="border-card" v-model="currentTab" @tab-click="tab_click" v-if="tabs.length" @tab-remove="tab_remove">
-      <el-tab-pane v-for="(item) in tabs" :key="item.name" :label="item.name" :name="item.route" :closable="item.route == '/' ? false : true " style="height:100%"></el-tab-pane>
-    </el-tabs>
-    <div class="content">
+  <el-main>
+    <div class="jyz-middle-main-header">
+      <el-tabs id="tabs" type="card" v-model="currentTab" @tab-click="tab_click" v-if="tabs.length" @tab-remove="tab_remove">
+        <el-tab-pane v-for="(item) in tabs" :key="item.name" :label="item.name" :name="item.route" :closable="item.route == '/' ? false : true "></el-tab-pane>
+      </el-tabs>
+    </div>
+    <div class="jyz-middle-main-content">
       <router-view />
     </div>
     <!-- <el-col class="breadcrumb-container" >
@@ -103,54 +105,10 @@ export default {
 <style scoped>
 </style>
 <style>
-#main {
-  padding: 0px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-#main #tabs {
-  display: flex;
-  flex-direction: column;
-  border: 0px;
-}
-#main #tabs .el-tabs__content {
-  flex: 1;
-  border: 1px solid#cfd7e5;
-  border-top: none;
-  border-bottom: none;
-  display: none;
-}
-#main #tabs .el-tabs__nav {
-  overflow: hidden;
-  border: 1px solid#cfd7e5;
-  border-bottom: 0px;
-  border-radius: 4px 4px 0px 0px;
-}
-#main #tabs > .el-tabs__header .el-tabs__item {
-  border-left-color: #cfd7e5;
-}
-#main #tabs > .el-tabs__header .el-tabs__item:first-child {
-  border-left: 0px;
-}
-#main #tabs > .el-tabs__header .el-tabs__item.is-active {
-  color: #409eff;
-  background-color: #fff;
-  border-right: 0px;
-}
-
-#main #tabs > .el-tabs__header {
-  background-color: #ebf1f6;
-}
-#main #tabs > .el-tabs__header .el-tabs__item {
-  background-color: rgba(0, 0, 0, 0.03);
-  color: #606266;
-}
-.content {
+.jyz-middle-main-content {
   border: 1px solid #e4e7ed;
   border-top: 0px;
-  height: 100%;
-  padding: 15px;
+  flex: 1;
   background: #fff;
 }
 </style>

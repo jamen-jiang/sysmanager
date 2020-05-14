@@ -4,7 +4,7 @@
     <el-container class="jyz-middle">
       <MenuBar></MenuBar>
       <el-container>
-        <Main></Main>
+        <Main class="jyz-middle-main"></Main>
       </el-container>
     </el-container>
   </el-container>

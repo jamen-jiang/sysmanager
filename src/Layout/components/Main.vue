@@ -110,5 +110,6 @@ export default {
   border-top: 0px;
   flex: 1;
   background: #fff;
+  overflow: hidden;
 }
 </style>

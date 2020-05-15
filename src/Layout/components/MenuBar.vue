@@ -1,5 +1,5 @@
 <template>
-  <aside style="width:200px;">
+  <aside style="width:200px;overflow: auto;">
     <el-menu :default-active="$route.path" :router="true" unique-opened clss="left-menu">
       <label v-if="menus!=null && menus.length>0">
         <menutree :data="menus"></menutree>

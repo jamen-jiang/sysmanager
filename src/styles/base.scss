@@ -61,6 +61,7 @@ body,
     }
   }
   .jyz-middle {
+    overflow: hidden;
     .el-menu {
       background-color: transparent;
       border-right: 0px;
@@ -70,6 +71,7 @@ body,
       display: flex;
       flex-direction: column;
       height: 100%;
+      overflow: hidden;
       .jyz-middle-main-header {
         height: 41px;
         .el-tabs__header.is-top {

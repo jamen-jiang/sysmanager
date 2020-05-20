@@ -1,64 +1,61 @@
 <template>
-  <div style='display:flex;flex-direction: column;height:100%;overflow: hidden;'>
-    <el-button-group class="operate-btngroup">
+  <jyz-container>
+    <el-button-group class="operate-btngroup" slot="header">
       <el-button size="small" type="primary" @click="addAccount()" icon="el-icon-circle-plus">添加</el-button>
-      <ktbutton label="新增" perms="System_User_Add" type="primary"></ktbutton>
+      <jyz-perms-btn label="新增" perms="System_User_Add" type="primary"></jyz-perms-btn>
     </el-button-group>
-    <div style="flex:1;overflow: hidden;">
-      <el-table :data="userList" row-key="Id" height='100%'>
-        <el-table-column prop="Name" label="用户名"></el-table-column>
-        <el-table-column prop="UserName" label="用户账号"></el-table-column>
-        <!-- <el-table-column prop="Role" label="角色" align='center' width="300">
+    <el-table :data="userList" row-key="Id" height='100%'>
+      <el-table-column prop="Name" label="用户名"></el-table-column>
+      <el-table-column prop="UserName" label="用户账号"></el-table-column>
+      <!-- <el-table-column prop="Role" label="角色" align='center' width="300">
         <template slot-scope="scope">
           <el-tag type="success" v-for="r in scope.row.Role" :key='r'>
             {{r}} 
           </el-tag>
         </template>
-    </el-table-column>-->
-        <el-table-column prop="Remark" label="备注"></el-table-column>
-        <el-table-column prop="IsEnable" label="状态" width="100">
-          <template slot-scope="scope">
-            <el-tag size="small" type="success" effect="dark" v-if="scope.row.IsEnable">正常</el-tag>
-            <el-tag size="small" type="danger" effect="dark" v-else>禁用</el-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="Id" label="操作" width="300" fixed="right">
-          <template slot-scope="scope">
-            <el-button type="primary" @click="editUser(scope.row.Id)" size="mini">修改</el-button>
-            <!-- <el-button type="danger" size="mini">删除</el-button> -->
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-dialog title="用户信息" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
-        <el-form :model="user" ref="user" :rules="rules">
-          <el-form-item label="名称" :label-width="formLabelWidth" prop="Name">
-            <el-input v-model="user.Name" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="用户账号" :label-width="formLabelWidth" prop="UserName">
-            <el-input v-model="user.UserName" autocomplete="off"></el-input>
-          </el-form-item>
-          <el-form-item label="备注" :label-width="formLabelWidth" prop="Remark">
-            <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="user.Remark"></el-input>
-          </el-form-item>
-          <el-form-item label="状态" prop="IsEnable" :label-width="formLabelWidth" v-if="user.Id">
-            <el-switch v-model="user.IsEnable"></el-switch>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false" size="mini">取 消</el-button>
-          <el-button type="primary" @click="saveUser('user')" size="mini">确 定</el-button>
-        </div>
-      </el-dialog>
-    </div>
-    <div>
+      </el-table-column>-->
+      <el-table-column prop="Remark" label="备注"></el-table-column>
+      <el-table-column prop="IsEnable" label="状态" width="100">
+        <template slot-scope="scope">
+          <el-tag size="small" type="success" effect="dark" v-if="scope.row.IsEnable">正常</el-tag>
+          <el-tag size="small" type="danger" effect="dark" v-else>禁用</el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="Id" label="操作" width="300" fixed="right">
+        <template slot-scope="scope">
+          <el-button type="primary" @click="editUser(scope.row.Id)" size="mini">修改</el-button>
+          <!-- <el-button type="danger" size="mini">删除</el-button> -->
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-dialog title="用户信息" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
+      <el-form :model="user" ref="user" :rules="rules">
+        <el-form-item label="名称" :label-width="formLabelWidth" prop="Name">
+          <el-input v-model="user.Name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="用户账号" :label-width="formLabelWidth" prop="UserName">
+          <el-input v-model="user.UserName" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="备注" :label-width="formLabelWidth" prop="Remark">
+          <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="user.Remark"></el-input>
+        </el-form-item>
+        <el-form-item label="状态" prop="IsEnable" :label-width="formLabelWidth" v-if="user.Id">
+          <el-switch v-model="user.IsEnable"></el-switch>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="saveUser('user')" size="mini">确 定</el-button>
+      </div>
+    </el-dialog>
+    <div slot="footer">
       12388888
       12388888
     </div>
-  </div>
+  </jyz-container>
 </template>
 
 <script>
-import ktbutton from "@/components/ktbutton";
 export default {
   props: {},
   data() {
@@ -114,7 +111,6 @@ export default {
     }
   },
   components: {
-    ktbutton
   },
   computed: {},
   //实例刚在内存中被创建出来,此时,还没有初始化好 data 和 methods 属性

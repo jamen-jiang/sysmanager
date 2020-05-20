@@ -104,12 +104,3 @@ export default {
 
 <style scoped>
 </style>
-<style>
-.jyz-middle-main-content {
-  border: 1px solid #e4e7ed;
-  border-top: 0px;
-  flex: 1;
-  background: #fff;
-  overflow: hidden;
-}
-</style>

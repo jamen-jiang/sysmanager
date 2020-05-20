@@ -197,6 +197,23 @@
           color: $theme-multiple-page-control-nav-next-color;
         }
       }
+      .jyz-middle-main-content {
+        border-color: $theme-multiple-page-control-border-color;
+        background: $theme-multiple-page-control-border-color-active;
+        .jyz-container {
+          .jyz-container-header {
+            border-bottom: $theme-container-border-inner;
+            background: $theme-container-header-footer-background-color;
+          }
+          .jyz-container-body {
+            background: $theme-container-background-color;
+          }
+          .jyz-container-footer {
+            border-top: $theme-container-border-inner;
+            background: $theme-container-header-footer-background-color;
+          }
+        }
+      }
     }
   }
 }

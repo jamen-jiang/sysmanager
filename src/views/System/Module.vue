@@ -2,9 +2,9 @@
   <div style="height: 100%;">
     <el-button-group class="operate-btngroup">
       <!-- <el-button size="small" type="primary" @click="addAccount()" icon="el-icon-circle-plus">添加</el-button> -->
-      <ktbutton label="新增模块" perms="System_Module_Add" type="primary" @click="addModule"></ktbutton>
-      <ktbutton label="新增目录" perms="System_Module_Add" type="primary"></ktbutton>
-      <ktbutton label="新增菜单" perms="System_Module_Add" type="primary"></ktbutton>
+      <jyz-perms-btn label="新增模块" perms="System_Module_Add" type="primary" @click="addModule"></jyz-perms-btn>
+      <jyz-perms-btn label="新增目录" perms="System_Module_Add" type="primary"></jyz-perms-btn>
+      <jyz-perms-btn label="新增菜单" perms="System_Module_Add" type="primary"></jyz-perms-btn>
     </el-button-group>
     <!-- <div slot="header" class="clearfix" >
           <el-input class="el-search" placeholder="请输入内容" size="small"></el-input>
@@ -130,7 +130,6 @@
 </template>
 
 <script>
-import ktbutton from "@/components/ktbutton";
 export default {
   props: {},
   data() {
@@ -284,7 +283,6 @@ export default {
     },
   },
   components: {
-    ktbutton,
   },
   computed: {},
   //实例刚在内存中被创建出来,此时,还没有初始化好 data 和 methods 属性

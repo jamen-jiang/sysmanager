@@ -78,6 +78,29 @@ body,
           overflow: hidden;
         }
       }
+      .jyz-middle-main-content {
+        border: 1px solid #cfd7e5;
+        border-top: 0px;
+        flex: 1;
+        overflow: hidden;
+        .jyz-container {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+          overflow: hidden;
+          .jyz-container-header {
+            padding: 20px;
+          }
+          .jyz-container-body {
+            flex: 1;
+            padding: 20px;
+            overflow: hidden;
+          }
+          .jyz-container-footer {
+            padding: 20px;
+          }
+        }
+      }
     }
   }
 }

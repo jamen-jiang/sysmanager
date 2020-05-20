@@ -2,7 +2,7 @@
   <div style="height: 100%;">
     <el-button-group class="operate-btngroup">
       <!-- <el-button size="small" type="primary" @click="addAccount()" icon="el-icon-circle-plus">添加</el-button> -->
-      <ktbutton label="新增" perms="System_Api_Add" type="primary"></ktbutton>
+      <jyz-perms-btn label="新增" perms="System_Api_Add" type="primary"></jyz-perms-btn>
     </el-button-group>
     <el-table :data="userList" style="width:100%" row-key="Id" height="95%">
       <el-table-column prop="AssemblyName" label="程序集名称" align="center"></el-table-column>
@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import ktbutton from "@/components/ktbutton";
 export default {
   props: {},
   data() {
@@ -109,27 +108,26 @@ export default {
     }
   },
   components: {
-    ktbutton
   },
   computed: {},
   //实例刚在内存中被创建出来,此时,还没有初始化好 data 和 methods 属性
-  beforeCreate() {},
+  beforeCreate() { },
   //实例已经在内存中创建OK,此时 data 和 methods 已经创建OK,此时还没有开始 编译模板
-  created() {},
+  created() { },
   //此时已经完成了模板的编译,但是还没有挂载到页面中
-  beforeMount() {},
+  beforeMount() { },
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
   mounted() {
     this.getApis();
   },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
-  beforeUpdate() {},
+  beforeUpdate() { },
   //实例更新完毕之后调用此函数,此时 data 中的状态值 和 界面上显示的数据,都已经完成了更新,界面已经被重新渲染好了!
-  updated() {},
+  updated() { },
   //Vue实例销毁之前调用.在这一步,Vue实例仍然完全可用
-  beforeDestroy() {},
+  beforeDestroy() { },
   //Vue实例销毁后调用.调用后,Vue实例指示的所有东西都会解绑定,所有的事件监听器会被移除,所有的子实例也会被销毁
-  destroyed() {},
+  destroyed() { },
   watch: {}
 };
 </script>

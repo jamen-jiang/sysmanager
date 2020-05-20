@@ -7,7 +7,7 @@
 <script>
 import { hasPermission } from "@/permission/index.js";
 export default {
-  name: "KtButton",
+  name: "jyz-authorize-btn",
   props: {
     label: {
       // 按钮显示文本

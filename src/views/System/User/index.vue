@@ -2,7 +2,7 @@
   <div style='display:flex;flex-direction: column;height:100%;overflow: hidden;'>
     <el-button-group class="operate-btngroup">
       <el-button size="small" type="primary" @click="addAccount()" icon="el-icon-circle-plus">添加</el-button>
-      <ktbutton label="新增" perms="System_User_Add" type="primary"></ktbutton>
+      <jyz-perms-btn label="新增" perms="System_User_Add" type="primary"></jyz-perms-btn>
     </el-button-group>
     <div style="flex:1;overflow: hidden;">
       <el-table :data="userList" row-key="Id" height='100%'>
@@ -58,7 +58,6 @@
 </template>
 
 <script>
-import ktbutton from "@/components/ktbutton";
 export default {
   props: {},
   data() {
@@ -114,7 +113,6 @@ export default {
     }
   },
   components: {
-    ktbutton
   },
   computed: {},
   //实例刚在内存中被创建出来,此时,还没有初始化好 data 和 methods 属性

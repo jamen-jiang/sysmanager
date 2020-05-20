@@ -7,6 +7,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 import Cookies from 'js-cookie';
 import '@/icons/iconfont/iconfont.css';
 import api from './api'; // 导入api接口
+// 组件
+import '@/components';
 
 Vue.prototype.HOST = '/api';
 Vue.config.productionTip = false;

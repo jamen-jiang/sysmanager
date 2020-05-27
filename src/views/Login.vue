@@ -28,8 +28,8 @@ export default {
     };
   },
   computed: {},
-  created() {},
-  mounted() {},
+  created() { },
+  mounted() { },
   watch: {},
   methods: {
     login() {
@@ -37,8 +37,7 @@ export default {
       params.UserName = this.loginForm.userName;
       params.PassWord = this.loginForm.password;
       this.$api.passport.login(params).then(res => {
-        localStorage.setItem("token", res.Data.Token);
-        localStorage.setItem("permission", JSON.stringify(res.Data.Permission));
+        localStorage.setItem("token", res.Data);
         this.$router.push("/");
       });
     }

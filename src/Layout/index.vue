@@ -19,7 +19,8 @@ export default {
   },
   computed: {},
   created() { },
-  mounted() { },
+  mounted() {
+  },
   watch: {},
   methods: {},
   components: {

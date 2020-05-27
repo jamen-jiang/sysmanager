@@ -106,8 +106,8 @@ axios.interceptors.response.use(
     } else {
       data = response.data;
     }
-    if (data.IsSuccess !== true) {
-      errorHandle(data.StatusCode, data.Message);
+    if (data.Status !== '200') {
+      errorHandle(data.Status, data.Message);
       return Promise.reject(data);
     } else {
       return data;
@@ -180,22 +180,22 @@ const toLogin = () => {
  * @param {Number} statusCode 请求失败的状态码
  * @param {String} message 提示信息
  */
-const errorHandle = (statusCode, message) => {
-  switch (statusCode) {
-    case 0:
+const errorHandle = (status, message) => {
+  switch (status) {
+    case 1:
       Message.error('token无效');
       break;
-    case 1:
+    case 2:
       Message.error('token过期');
       toLogin();
       break;
-    case 2:
+    case 3:
       Message.error('权限不足,请联系管理员');
       break;
-    case 3:
+    case 98:
       Message.error(message);
       break;
-    case 4:
+    case 99:
       Message.error('系统异常');
       break;
     default:

@@ -7,6 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import Cookies from 'js-cookie';
 import '@/icons/iconfont/iconfont.css';
 import api from './api'; // 导入api接口
+//import { setRouter } from './utils/common';
 // 组件
 import '@/components';
 
@@ -33,9 +34,10 @@ router.beforeEach((to, from, next) => {
     } else {
       //动态生成路由
       if (store.state.permission.permission != {}) {
-        let permission = localStorage.getItem('permission');
-        store.commit('permission/setPermission', JSON.parse(permission));
-        //setRouter(store.state.menus);
+        api.passport.home().then(res => {
+          store.commit('permission/setPermission', res.Data);
+        });
+        //setRouter(store.state.permission.menus);
       } else {
         let flag = false; //判断是否页面中是否已经存在该路由下的tab页
         //options记录当前页面中已存在的tab页

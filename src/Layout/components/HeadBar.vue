@@ -51,8 +51,8 @@ export default {
   components: {},
   computed: {
     ...mapState({
-      modules: state => state.permission.permission.ModuleTreeList,
-      menus: state => state.permission.permission.MenuTreeList,
+      modules: state => state.permission.permission.ModuleList,
+      menus: state => state.permission.permission.MenuList,
       isCollapse: state => state.permission.menuIsCollapse
     })
   },

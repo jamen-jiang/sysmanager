@@ -34,7 +34,7 @@ router.beforeEach((to, from, next) => {
     } else {
       //动态生成路由
       if (store.state.permission.permission != {}) {
-        api.passport.home().then(res => {
+        api.passport.layout().then(res => {
           store.commit('permission/setPermission', res.Data);
         });
         //setRouter(store.state.permission.menus);

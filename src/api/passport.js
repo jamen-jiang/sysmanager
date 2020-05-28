@@ -3,13 +3,15 @@ import { request } from '@/http/http';
 const passport = {
   // 登录
   login(params) {
-    params.Code = 'Login';
-    return request(params);
+    let data = {};
+    data.Params = params;
+    data.Code = 'Login';
+    return request(data);
   },
-  home() {
-    let params = {};
-    params.Code = 'Home';
-    return request(params);
+  layout() {
+    let data = {};
+    data.Code = 'Layout';
+    return request(data);
   },
   // 登出
   logout() {},

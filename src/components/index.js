@@ -1,6 +1,6 @@
 import Vue from 'vue';
-import jyzContainer from './jyz-container';
-import jyzPermsBtn from './jyz-perms-btn';
+import JyzContainer from './container';
+import JyzAuthorizebtn from './authorizebtn';
 
-Vue.component('jyz-container', jyzContainer);
-Vue.component('jyz-perms-btn', jyzPermsBtn);
+Vue.component(JyzContainer.name, JyzContainer);
+Vue.component(JyzAuthorizebtn.name, JyzAuthorizebtn);

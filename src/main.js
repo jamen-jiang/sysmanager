@@ -7,7 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import Cookies from 'js-cookie';
 import '@/icons/iconfont/iconfont.css';
 import api from './api'; // 导入api接口
-//import { setRouter } from './utils/common';
+import { setRouter } from './utils/common';
 // 组件
 import '@/components';
 
@@ -17,7 +17,7 @@ Vue.use(ElementUI);
 Vue.prototype.$api = api; // 将api挂载到vue的原型上
 
 router.beforeEach((to, from, next) => {
-  let token = localStorage.getItem('token');
+  let token = Cookies.get('token');
   if (to.path == '/login') {
     if (token) {
       next({
@@ -33,11 +33,11 @@ router.beforeEach((to, from, next) => {
       });
     } else {
       //动态生成路由
-      if (store.state.permission.permission != {}) {
-        api.passport.layout().then(res => {
-          store.commit('permission/setPermission', res.Data);
+      if (store.state.privilege.modules != {}) {
+        api.privilege.getAuthorizeModules().then(res => {
+          store.commit('privilege/modules_set', res.Data);
+          setRouter(store.state.privilege.modules);
         });
-        //setRouter(store.state.permission.menus);
       } else {
         let flag = false; //判断是否页面中是否已经存在该路由下的tab页
         //options记录当前页面中已存在的tab页

@@ -14,8 +14,9 @@
 
 <script>
 export default {
+  name: 'JyzContainer',
   props: {
-    name: 'jyz-container'
+
   },
   data() {
     return {

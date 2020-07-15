@@ -1,17 +1,17 @@
 <template>
   <el-container class="is-vertical jyz-layout">
-    <HeadBar class="jyz-header"></HeadBar>
+    <jyz-header class="jyz-header"></jyz-header>
     <el-container class="jyz-middle">
-      <MenuBar></MenuBar>
+      <jyz-lefter></jyz-lefter>
       <el-container>
-        <Main class="jyz-middle-main"></Main>
+        <jyz-main class="jyz-middle-main"></jyz-main>
       </el-container>
     </el-container>
   </el-container>
 </template>
 
 <script>
-import { HeadBar, MenuBar, Main, FootBar } from "./components";
+import { JyzHeader, JyzLefter, JyzMain, JyzFooter } from "./components";
 export default {
   props: {},
   data() {
@@ -24,10 +24,7 @@ export default {
   watch: {},
   methods: {},
   components: {
-    HeadBar,
-    MenuBar,
-    Main,
-    FootBar,
+    JyzHeader, JyzLefter, JyzMain, JyzFooter
   },
 };
 </script>

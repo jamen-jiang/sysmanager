@@ -1,26 +1,26 @@
-import Vue from 'vue'
-import Router from 'vue-router'
-import Layout from '../Layout'
-import Login from '../views/Login.vue'
+import Vue from 'vue';
+import Router from 'vue-router';
+import layout from '../layout';
+import login from '../views/login.vue';
 
-Vue.use(Router)
+Vue.use(Router);
 const originalPush = Router.prototype.push;
 Router.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch(err => err)
+  return originalPush.call(this, location).catch(err => err);
 };
 export default new Router({
   mode: 'history',
-  routes: [{
+  routes: [
+    {
       path: '/',
       name: '首页',
-      component: Layout,
-      children: []
+      component: layout,
+      children: [],
     },
     {
       path: '/login',
-      name: 'Login',
-      component: Login
+      name: 'login',
+      component: login,
     },
-
-  ]
-})
+  ],
+});

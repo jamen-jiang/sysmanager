@@ -1,6 +1,10 @@
-import { request } from '@/http/http';
+import request from '@/utils/request';
 
 const module = {
+  getAuthorizeModules() {
+    let url = '/Module/GetAuthorizeModule';
+    return request('get', url);
+  },
   // 模块列表
   list() {
     var params = {};

@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
 export default {
   name: "login",
   props: {},
@@ -36,8 +37,8 @@ export default {
       let params = {};
       params.UserName = this.loginForm.userName;
       params.PassWord = this.loginForm.password;
-      this.$api.passport.login(params).then(res => {
-        localStorage.setItem("token", res.Data);
+      this.$api.user.login(params).then(res => {
+        let token = Cookies.set('token', res.Data.Token);
         this.$router.push("/");
       });
     }

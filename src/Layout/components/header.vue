@@ -20,7 +20,7 @@
 import { mapState } from "vuex";
 import { setRouter } from "@/utils/common.js";
 export default {
-  name: "HeadBar",
+  name: 'JyzHeader',
   props: {},
   data() {
     return {
@@ -28,32 +28,30 @@ export default {
     };
   },
   methods: {
-    select(id) {
-      this.menuTree = [];
-      this.menus.forEach(m => {
-        if (m.ModuleId == id) {
-          this.menuTree.push(m);
-        }
-      });
-      if (this.menuTree.length > 0) {
-        setRouter(this.menuTree);
-      }
-      this.$store.commit("permission/get_menus", this.menuTree);
-    },
+    // select(id) {
+    //   this.menuTree = [];
+    //   this.menus.forEach(m => {
+    //     if (m.ModuleId == id) {
+    //       this.menuTree.push(m);
+    //     }
+    //   });
+    //   if (this.menuTree.length > 0) {
+    //     setRouter(this.menuTree);
+    //   }
+    //   this.$store.commit("permission/get_menus", this.menuTree);
+    // },
     selecthome() {
-      this.$router.push({ path: "/" });
-      this.$store.commit("permission/get_menus", []);
+      // this.$router.push({ path: "/" });
+      // this.$store.commit("permission/get_menus", []);
     },
     toggle() {
-      this.$store.commit("permission/set_MenuCollapse", !this.isCollapse);
+      //this.$store.commit("permission/set_MenuCollapse", !this.isCollapse);
     }
   },
   components: {},
   computed: {
     ...mapState({
-      modules: state => state.permission.permission.ModuleList,
-      menus: state => state.permission.permission.MenuList,
-      isCollapse: state => state.permission.menuIsCollapse
+      modules: state => state.privilege.modules,
     })
   },
   //实例刚在内存中被创建出来,此时,还没有初始化好 data 和 methods 属性

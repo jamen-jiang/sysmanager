@@ -1,8 +1,8 @@
 <template>
   <aside style="width:200px;overflow: auto;">
     <el-menu :default-active="$route.path" :router="true" unique-opened clss="left-menu">
-      <label v-if="menus!=null && menus.length>0">
-        <menutree :data="menus"></menutree>
+      <label v-if="modules!=null && modules.length>0">
+        <menutree :data="modules"></menutree>
       </label>
       <label v-else>
         <div class="menunone">
@@ -29,7 +29,7 @@ import { mapState } from "vuex";
 import { mapMutations } from "vuex";
 import menutree from "../../components/menutree";
 export default {
-  name: "MenuBar",
+  name: 'JyzLefter',
   props: {},
   data() {
     return {};
@@ -40,9 +40,8 @@ export default {
   },
   computed: {
     ...mapState({
-      menus: state => state.permission.menus,
+      modules: state => state.privilege.modules,
       tabs: state => state.tab.tabs,
-      isCollapse: state => state.permission.menuIsCollapse
     })
   },
   //实例刚在内存中被创建出来,此时,还没有初始化好 data 和 methods 属性

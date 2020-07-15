@@ -1,4 +1,4 @@
-export { default as HeadBar } from './HeadBar'
-export { default as MenuBar } from './MenuBar'
-export { default as Main } from './Main'
-export { default as FootBar } from './FootBar'
+export { default as JyzHeader } from './header';
+export { default as JyzLefter } from './lefter';
+export { default as JyzMain } from './main';
+export { default as JyzFooter } from './footer';

@@ -3,14 +3,14 @@
  */
 
 // 模块接口
-import passport from "@/api/passport";
-import module from "@/api/module";
-import user from "@/api/user";
+import privilege from '@/api/privilege';
+import module from '@/api/module';
+import user from '@/api/user';
 
 // 导出接口
 export default {
-  passport,
+  privilege,
   module,
-  user
+  user,
   // ……
 };

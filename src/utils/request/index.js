@@ -8,21 +8,14 @@ import { Message, MessageBox } from 'element-ui';
 
 //设置超时时间
 axios.defaults.timeout = 100000;
-axios.defaults.baseURL = 'https://localhost:44348';
+axios.defaults.baseURL = 'http://localhost:5000';
 // post请求头
-axios.defaults.headers['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8';
+axios.defaults.headers['Content-Type'] = 'application/json;charset=UTF-8';
 
 //对外接口
-export function request(params) {
-  let url = '';
-  return post(url, params);
-}
-
-// 封装get方法
-function get(url, params) {
+export default function request(config) {
   return new Promise((resolve, reject) => {
-    axios
-      .get(url, params)
+    axios(config)
       .then(res => {
         resolve(res);
       })
@@ -31,32 +24,16 @@ function get(url, params) {
       });
   });
 }
-
-// 封装post方法
-function post(url, params) {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(url, params)
-      .then(res => {
-        resolve(res);
-      })
-      .catch(err => {
-        reject(err);
-      });
-  });
-}
-
 // request 拦截器
 axios.interceptors.request.use(
   config => {
-    let token = localStorage.getItem('token');
+    let token = Cookies.get('token');
     // 1. 请求开始的时候可以结合 vuex 开启全屏 loading 动画
     // console.log(store.state.loading)
     // console.log('准备发送请求...')
     // 2. 带上token
     if (token) {
-      //config.headers.token = token;
-      config.data.Token = token;
+      config.headers.Authorization = 'Bearer ' + token;
     } else {
       // 重定向到登录页面
       router.push('/login');
@@ -69,7 +46,6 @@ axios.interceptors.request.use(
     //     config.url.endsWith('mark') ||
     //     config.url.endsWith('patchs')
     //   ) {
-    //     //config.data = QS.stringify(config.data);
     //   } else {
     //     config.data = QS.stringify(config.data);
     //   }
@@ -128,7 +104,8 @@ axios.interceptors.response.use(
           err.message = '拒绝访问';
           break;
         case 404:
-          err.message = '请求地址出错: ${err.response.config.url}';
+          //err.message = '请求地址出错: ${err.response.config.url}';
+          err.message = '请求地址出错';
           break;
         case 408:
           err.message = '请求超时';
@@ -152,7 +129,8 @@ axios.interceptors.response.use(
           err.message = 'HTTP版本不受支持';
           break;
         default:
-          err.message = '连接错误${err.response.status}';
+          //err.message = '连接错误${err.response.status}';
+          err.message = '连接错误';
       }
     } else {
       err.message = '连接到服务器失败';
@@ -166,8 +144,8 @@ axios.interceptors.response.use(
  * 跳转登录页
  */
 const toLogin = () => {
-  //清除token缓存
-  localStorage.removeItem('token');
+  //清除token
+  Cookies.remove('token');
   setTimeout(() => {
     router.replace({
       path: '/login',
@@ -191,12 +169,15 @@ const errorHandle = (status, message) => {
       Message.error('token过期');
       toLogin();
       break;
-    case 3:
+    case 401:
       Message.error('权限不足,请联系管理员');
       break;
-    case 98:
-      Message.error(message);
+    case 403:
+      Message.error('403');
       break;
+    // case 98:
+    //   Message.error(message);
+    //   break;
     case 99:
       Message.error('系统异常');
       break;

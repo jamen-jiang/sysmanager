@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import { hasPermission } from "@/permission/index.js";
+import isAuthorize from "@/utils/authorize/";
 export default {
-  name: "jyz-authorize-btn",
+  name: "JyzAuthorizebtn",
   props: {
     label: {
       // 按钮显示文本

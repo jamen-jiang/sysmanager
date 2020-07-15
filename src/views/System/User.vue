@@ -2,9 +2,9 @@
   <jyz-container>
     <el-button-group class="operate-btngroup" slot="header">
       <el-button size="small" type="primary" @click="addAccount()" icon="el-icon-circle-plus">添加</el-button>
-      <jyz-perms-btn label="新增" perms="System_User_Add" type="primary"></jyz-perms-btn>
+      <!-- <jyz-perms-btn label="新增" perms="System_User_Add" type="primary"></jyz-perms-btn> -->
     </el-button-group>
-    <el-table :data="userList" row-key="Id" height='100%'>
+    <el-table :data="users" row-key="Id" height='100%'>
       <el-table-column prop="Name" label="用户名"></el-table-column>
       <el-table-column prop="UserName" label="用户账号"></el-table-column>
       <!-- <el-table-column prop="Role" label="角色" align='center' width="300">
@@ -49,8 +49,8 @@
       </div>
     </el-dialog>
     <div slot="footer">
-      12388888
-      12388888
+      <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="pageIndex" :page-sizes="[10, 20, 30, 40,50,60,70,80,90,100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
+      </el-pagination>
     </div>
   </jyz-container>
 </template>
@@ -60,7 +60,7 @@ export default {
   props: {},
   data() {
     return {
-      userList: [],
+      users: [],
       user: {},
       dialogFormVisible: false,
       formLabelWidth: "120px",
@@ -73,13 +73,21 @@ export default {
           { required: true, message: "请输入用户账号", trigger: "blur" },
           { min: 5, max: 20, message: "长度在 5 到 20 个字符", trigger: "blur" }
         ]
-      }
+      },
+      pageIndex: 1,
+      pageSize: 10,
+      totalCount: 0,
     };
   },
   methods: {
     getUsers() {
-      this.$api.user.list().then(res => {
-        this.userList = res.Data.UserList;
+      var params = {
+        pageIndex: this.pageIndex,
+        pageSize: this.pageSize
+      }
+      this.$api.user.get(params).then(res => {
+        this.users = res.Data;
+        this.totalCount = res.TotalCount;
       });
     },
     editUser(id) {
@@ -108,6 +116,14 @@ export default {
           return false;
         }
       });
+    },
+    sizeChange(val) {
+      this.pageSize = val;
+      this.getUsers();
+    },
+    currentChange(val) {
+      this.pageIndex = val;
+      this.getUsers();
     }
   },
   components: {

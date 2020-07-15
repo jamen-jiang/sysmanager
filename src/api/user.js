@@ -1,11 +1,25 @@
-import { request } from '@/http/http';
+import request from '@/utils/request';
 
 const user = {
+  // 登录
+  login(data) {
+    let url = '/user/login';
+    return request({
+      url: url,
+      method: 'post',
+      data,
+    });
+  },
+  // 登出
+  logout() {},
   // 用户列表列表
-  list() {
-    let params = {};
-    params.code = 'User_List';
-    return request(params);
+  get(params) {
+    let url = '/user/get';
+    return request({
+      url: url,
+      method: 'get',
+      params,
+    });
   },
   // 用户详情
   detail(id) {

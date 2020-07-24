@@ -20,6 +20,7 @@ const setRouter = modules => {
               array[1].substring(0, 1).toUpperCase() +
               array[1].substring(1);
             route['component'] = resolve => require([`@/views/${url}`], resolve);
+            route['meta'] = module;
           }
           router.options.routes[0].children.push(route);
         }

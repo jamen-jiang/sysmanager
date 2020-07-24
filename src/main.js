@@ -7,7 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css';
 import Cookies from 'js-cookie';
 import '@/icons/iconfont/iconfont.css';
 import api from './api'; // 导入api接口
-import { setRouter } from './utils/common';
+import { setRouter } from './utils/router';
 // 组件
 import '@/components';
 
@@ -33,7 +33,7 @@ router.beforeEach((to, from, next) => {
       });
     } else {
       //动态生成路由
-      if (store.state.privilege.modules != {}) {
+      if (store.state.privilege.modules.length <= 0) {
         api.privilege.getAuthorizeModules().then(res => {
           store.commit('privilege/modules_set', res.Data);
           setRouter(store.state.privilege.modules);
@@ -57,6 +57,7 @@ router.beforeEach((to, from, next) => {
           });
           store.commit('tab/tab_active', to.path);
         }
+        store.commit('privilege/module_select', to.meta);
       }
       next();
     }

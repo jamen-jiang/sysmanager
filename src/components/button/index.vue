@@ -1,13 +1,14 @@
 <template>
-  <jyz-button :size="size" :type="type" :loading="loading" :icon="icon" :circle="circle" :label='label' :classname="classname" :disabled="!isAuthorize(code)" @click="handleClick">
-  </jyz-button>
+  <el-button :size="size" :type="type" :loading="loading" :icon="icon" :circle="circle" @click="handleClick">
+    <span v-if="label!==''">
+      {{label}}
+    </span>
+  </el-button>
 </template>
 
 <script>
-import isAuthorize from "@/utils/authorize";
-import JyzButton from '../button';
 export default {
-  name: "JyzAuthorizebtn",
+  name: "Jyzbutton",
   props: {
     label: {
       // 按钮显示文本
@@ -43,11 +44,7 @@ export default {
       default: false
     },
     classname: {
-      type: String,
-      default: null
-    },
-    code: {
-      // 按钮权限标识，外部使用者传入
+      //类名
       type: String,
       default: null
     }
@@ -59,16 +56,9 @@ export default {
     handleClick: function () {
       // 按钮操作处理函数
       this.$emit("click", {});
-    },
-    isAuthorize: function (code) {
-      // 根据权限标识和外部指示状态进行权限判断
-      return isAuthorize(code) & !this.disabled;
     }
   },
   mounted() {
-  },
-  components: {
-    JyzButton
   }
 };
 </script>

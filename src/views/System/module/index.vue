@@ -1,46 +1,31 @@
 <template>
-  <div style="height: 100%;">
-    <el-button-group class="operate-btngroup">
+  <jyz-container>
+    <el-button-group class="operate-btngroup" slot="header">
       <!-- <el-button size="small" type="primary" @click="addAccount()" icon="el-icon-circle-plus">添加</el-button> -->
-      <jyz-perms-btn label="新增模块" perms="System_Module_Add" type="primary" @click="addModule"></jyz-perms-btn>
-      <jyz-perms-btn label="新增目录" perms="System_Module_Add" type="primary"></jyz-perms-btn>
-      <jyz-perms-btn label="新增菜单" perms="System_Module_Add" type="primary"></jyz-perms-btn>
+      <jyz-authorizebtn label="新增目录" perms="System_Module_Add" type="primary"></jyz-authorizebtn>
+      <jyz-authorizebtn label="新增模块" perms="System_Module_Add" type="primary"></jyz-authorizebtn>
     </el-button-group>
-    <!-- <div slot="header" class="clearfix" >
-          <el-input class="el-search" placeholder="请输入内容" size="small"></el-input>
-          <el-button size="small" type="primary" style="margin-left:10px" icon="el-icon-search">查询</el-button>
-    </div>-->
-    <!-- <el-row>
-        <el-col>
-          <el-button-group class="operate-btngroup">
-            <el-button size="small" type="primary" @click="addMenu()" icon="el-icon-circle-plus">添加菜单</el-button>
-            <el-button size="small" type="primary" icon="el-icon-edit" @click="editMenu()">编辑菜单</el-button>
-            <el-button size="small" type="primary" icon="el-icon-circle-plus" @click="addOperate()">添加按钮</el-button>
-            <el-button size="small" type="primary" icon="el-icon-edit" @click="editOperate()">编辑按钮</el-button>
-          </el-button-group>
-        </el-col>
-    </el-row>-->
-    <el-table ref="table" :data="tree" style="width:100%" row-key="Name" height="95%" :tree-props="{ children: 'Children', hasChildren: 'hasChildren' }" highlight-current-row @row-click="setCurrentRow">
-      <el-table-column prop="Name" label="模块名称" align="left" width="250">
+    <el-table ref="table" :data="modules" style="width:100%" row-key="Name" height="100%" :tree-props="{children: 'Children', hasChildren: 'hasChildren'}" highlight-current-row @row-click="setCurrentRow">
+      <el-table-column prop="Name" label="菜单名称" align="left" width="250">
         <template slot-scope="scope">
           <i :class="scope.row.Icon"></i>
           <span>{{ scope.row.Name }}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="Type" label="类型" align="center"></el-table-column>
+      <el-table-column prop="TypeName" label="类型" align="center"></el-table-column>
       <el-table-column prop="VueUri" label="VueUri" align="center"></el-table-column>
       <el-table-column prop="Sort" label="排序" align="center"></el-table-column>
       <el-table-column prop="Remark" label="备注" align="center"></el-table-column>
       <el-table-column prop="IsEnable" label="状态" align="center" width="100">
         <template slot-scope="scope">
-          <el-tag size="small" type="success" effect="dark" v-if="scope.row.IsEnable">正常</el-tag>
-          <el-tag size="small" type="danger" effect="dark" v-else>禁用</el-tag>
+          <el-tag size="mini" type="success" effect="dark" v-if="scope.row.IsEnable">正常</el-tag>
+          <el-tag size="mini" type="danger" effect="dark" v-else>禁用</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="Id" label="操作" align="center" width="300" fixed="right">
         <template slot-scope="scope">
-          <el-button type="primary" @click="editUser(scope.row.Id)" size="mini" v-if="scope.row.Operates">查看操作库</el-button>
-          <!-- <el-button type="danger" size="mini">删除</el-button> -->
+          <jyz-authorizebtn code="Disable" type="danger" icon='el-icon-delete' circle v-if="scope.row.IsEnable"></jyz-authorizebtn>
+          <jyz-authorizebtn code="Enable" type="success" icon='el-icon-refresh-left' circle v-else></jyz-authorizebtn>
         </template>
       </el-table-column>
     </el-table>
@@ -126,7 +111,7 @@
         <el-button type="primary" @click="saveMenu('menu')" size="mini">确 定</el-button>
       </div>
     </el-dialog>
-  </div>
+  </jyz-container>
 </template>
 
 <script>
@@ -134,7 +119,7 @@ export default {
   props: {},
   data() {
     return {
-      tree: [],
+      modules: [],
       module: {},
       menu: {},
       operates: [],
@@ -155,15 +140,19 @@ export default {
       menuRules: {
         Name: [{ required: true, message: "请输入菜单名称", trigger: "blur" }],
       },
+      treeProps: {
+        label: 'Name',
+        children: 'Children'
+      }
     };
   },
   methods: {
     setCurrentRow(row) {
       debugger;
     },
-    getModules() {
-      this.$api.module.list().then((res) => {
-        this.tree = res.Data.Tree;
+    get() {
+      this.$api.module.get().then((res) => {
+        this.modules = res.Data;
       });
     },
     editModule(id) {
@@ -281,6 +270,11 @@ export default {
         }
       });
     },
+    nodeClick(data) {
+      this.$api.module.getMenus(data.Id).then((res) => {
+        this.menus = res.Data;
+      });
+    }
   },
   components: {
   },
@@ -293,7 +287,7 @@ export default {
   beforeMount() { },
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
   mounted() {
-    this.getModules();
+    this.get();
   },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
   beforeUpdate() { },
@@ -316,5 +310,8 @@ export default {
 .col-operate-container {
   display: flex;
   flex-direction: column;
+}
+.btngroup {
+  padding: 20px;
 }
 </style>

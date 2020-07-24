@@ -12,16 +12,6 @@
       </label>
     </el-menu>
   </aside>
-  <!-- <el-menu :default-active="$route.path" :router='true' unique-opened background-color="#4C5D7B" text-color="#fff">
-            <el-submenu v-for="(m,index) in menus" :key="m.Id" :index='index+""'>
-                <template slot="title" style="padding-left:0px;"><i class="el-icon-message"></i>{{m.Name}}</template>
-                <el-menu-item-group v-if="m.Children && m.Children.length > 0">
-                    <el-menu-item v-for="c in m.Children" :key="c.Id" :index='c.VueUrl' > 
-                        {{c.Name}}
-                    </el-menu-item>
-                </el-menu-item-group>
-            </el-submenu>
-  </el-menu>-->
 </template>
 
 <script>
@@ -34,7 +24,8 @@ export default {
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+  },
   components: {
     menutree
   },
@@ -61,23 +52,23 @@ export default {
   //Vue实例销毁后调用.调用后,Vue实例指示的所有东西都会解绑定,所有的事件监听器会被移除,所有的子实例也会被销毁
   destroyed() { },
   watch: {
-    $route(to) {
-      let flag = false; //判断是否页面中是否已经存在该路由下的tab页
-      //options记录当前页面中已存在的tab页
-      for (let tab of this.tabs) {
-        //用名称匹配，如果存在即将对应的tab页设置为active显示桌面前端
-        if (tab.name === to.name) {
-          flag = true;
-          this.$store.commit("tab/tab_active", to.path);
-          break;
-        }
-      }
-      //如果不存在，则新增tab页，再将新增的tab页设置为active显示在桌面前端
-      if (!flag) {
-        this.$store.commit("tab/tab_add", { route: to.path, name: to.name });
-        this.$store.commit("tab/tab_active", to.path);
-      }
-    }
+    // $route(to) {
+    //   let flag = false; //判断是否页面中是否已经存在该路由下的tab页
+    //   //options记录当前页面中已存在的tab页
+    //   for (let tab of this.tabs) {
+    //     //用名称匹配，如果存在即将对应的tab页设置为active显示桌面前端
+    //     if (tab.name === to.name) {
+    //       flag = true;
+    //       this.$store.commit("tab/tab_active", to.path);
+    //       break;
+    //     }
+    //   }
+    //   //如果不存在，则新增tab页，再将新增的tab页设置为active显示在桌面前端
+    //   if (!flag) {
+    //     this.$store.commit("tab/tab_add", { route: to.path, name: to.name });
+    //     this.$store.commit("tab/tab_active", to.path);
+    //   }
+    // }
   }
 };
 </script>

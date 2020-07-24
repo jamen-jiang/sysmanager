@@ -18,7 +18,6 @@
 
 <script>
 import { mapState } from "vuex";
-import { setRouter } from "@/utils/common.js";
 export default {
   name: 'JyzHeader',
   props: {},

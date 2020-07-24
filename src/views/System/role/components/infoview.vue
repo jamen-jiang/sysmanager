@@ -1,34 +1,54 @@
 <template>
-  <div class="jyz-container">
-    <div v-if="$slots.header" class="jyz-container-header" ref="header">
-      <slot name="header" />
-    </div>
-    <div class="jyz-container-main">
-      <el-aside v-if="$slots.aside" class='jyz-container-main-aside' ref="aside" style="width:240px">
-        <slot name="aside" />
-      </el-aside>
-      <div class="jyz-container-main-body" ref="body">
-        <slot />
-      </div>
-    </div>
-    <div v-if="$slots.footer" class="jyz-container-footer" ref="footer">
-      <slot name="footer" />
-    </div>
+  <div>
+    <el-form :model="role" ref="role" :rules="rules">
+      <el-form-item label="名称" :label-width="formLabelWidth" prop="Name">
+        <el-input v-model="role.Name" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="备注" :label-width="formLabelWidth" prop="Remark">
+        <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="role.Remark"></el-input>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'JyzContainer',
   props: {
-
+    roleId: {
+      type: String,
+      default: ''
+    }
   },
   data() {
     return {
+      role: {},
+      formLabelWidth: "120px",
+      rules: {
+        Name: [
+          { required: true, message: "角色名称不能为空", trigger: "blur" },
+          { min: 2, max: 10, message: "长度在 5 到 20 个字符", trigger: "blur" }
+        ]
+      },
     };
   },
   methods: {
-
+    detail() {
+      var params = {
+        id: this.roleId,
+      }
+      this.$api.role.detail(params).then(res => {
+        this.role = res.Data;
+      });
+    },
+    isValid() {
+      let flag = true;
+      this.$refs['role'].validate(valid => {
+        if (!valid) {
+          flag = false;
+        }
+      });
+      return flag;
+    }
   },
   components: {
 
@@ -50,7 +70,10 @@ export default {
   },
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
   mounted() {
-
+    //this.$refs["role"].resetFields();
+    if (this.roleId) {
+      this.detail();
+    }
   },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
   beforeUpdate() {

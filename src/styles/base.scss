@@ -16,6 +16,10 @@ body,
   -moz-osx-font-smoothing: grayscale;
   font-size: 12px;
 }
+p {
+  padding: 0px;
+  margin: 0px;
+}
 .jyz-layout {
   height: 100%;
   overflow: hidden;
@@ -89,15 +93,28 @@ body,
           height: 100%;
           overflow: hidden;
           .jyz-container-header {
-            padding: 20px;
+            padding: 10px;
+            border-bottom: 1px solid #cfd7e5;
+            text-align: right;
           }
-          .jyz-container-body {
+          .jyz-container-main {
             flex: 1;
-            padding: 20px;
+            display: flex;
+            height: 100%;
             overflow: hidden;
+            .jyz-container-main-aside {
+              height: 100%;
+              padding: 10px;
+              border-right: 1px solid #cfd7e5;
+            }
+            .jyz-container-main-body {
+              flex: 1;
+              padding: 0px;
+              overflow: hidden;
+            }
           }
           .jyz-container-footer {
-            padding: 20px;
+            padding: 10px;
           }
         }
       }

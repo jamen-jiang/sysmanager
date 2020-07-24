@@ -52,14 +52,12 @@ export default {
         return;
       }
       //将改tab从tabs里移除
-      this.$store.commit("tab_remove", targetName);
+      this.$store.commit("tab/tab_remove", targetName);
       //还同时需要处理一种情况当需要移除的页面为当前激活的页面时，将上一个tab页作为激活tab
       if (this.currentTab === targetName) {
         // 设置当前激活的路由
         if (this.tabs && this.tabs.length >= 1) {
-          this.$store.commit(
-            "tab_active",
-            this.tabs[this.tabs.length - 1].route
+          this.$store.commit("tab/tab_active", this.tabs[this.tabs.length - 1].route
           );
           this.$router.push({ path: this.currentTab });
         } else {

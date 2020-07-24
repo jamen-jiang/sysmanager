@@ -5,11 +5,12 @@ const module = {
     let url = '/Module/GetAuthorizeModule';
     return request('get', url);
   },
-  // 模块列表
-  list() {
-    var params = {};
-    params.Code = 'Module_List';
-    return request(params);
+  get() {
+    let url = '/Module/Get';
+    return request({
+      url: url,
+      method: 'get',
+    });
   },
   // 模块详情
   detail(id) {

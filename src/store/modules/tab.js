@@ -1,10 +1,12 @@
 const state = {
-  tabs: [{
-    route: '/',
-    name: '首页'
-  }],
+  tabs: [
+    {
+      route: '/',
+      name: '首页',
+    },
+  ],
   currentTab: '/',
-}
+};
 
 const mutations = {
   //添加tab
@@ -25,16 +27,14 @@ const mutations = {
   // 设置当前激活的tab
   tab_active(state, index) {
     state.currentTab = index;
-  }
-}
+  },
+};
 
-const actions = {
-
-}
+const actions = {};
 
 export default {
   namespaced: true,
   state,
   mutations,
-  actions
-}
+  actions,
+};

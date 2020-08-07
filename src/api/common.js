@@ -8,15 +8,18 @@ const common = {
       method: 'get',
     });
   },
-  get(moduleId) {
-    let url = '/Operate/Get';
-    var params = {
-      moduleId: moduleId,
-    };
+  getModuleTypes() {
+    let url = '/Common/GetModuleTypes';
     return request({
       url: url,
       method: 'get',
-      params,
+    });
+  },
+  getModuleCatalogs() {
+    let url = '/Common/GetModuleCatalogs';
+    return request({
+      url: url,
+      method: 'get',
     });
   },
 };

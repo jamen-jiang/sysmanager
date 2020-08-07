@@ -5,25 +5,37 @@ const module = {
     let url = '/Module/GetAuthorizeModule';
     return request('get', url);
   },
-  get() {
-    let url = '/Module/Get';
+  query() {
+    let url = '/Module/Query';
     return request({
       url: url,
-      method: 'get',
+      method: 'post',
     });
   },
   // 模块详情
-  detail(id) {
-    var params = {};
-    params.Id = id;
-    params.Code = 'Module_Detail';
-    return request(params);
+  detail(params) {
+    let url = '/Module/Detail';
+    return request({
+      url: url,
+      method: 'get',
+      params,
+    });
   },
-  // 保存模块
-  save(params) {
-    if (params.Id) params.Code = 'Module_Edit';
-    else params.Code = 'Module_Add';
-    return request(params);
+  add(data) {
+    let url = '/Module/Add';
+    return request({
+      url: url,
+      method: 'post',
+      data,
+    });
+  },
+  modify(data) {
+    let url = '/Module/Modify';
+    return request({
+      url: url,
+      method: 'post',
+      data,
+    });
   },
 };
 export default module;

@@ -1,80 +1,63 @@
 <template>
   <jyz-container>
+    <div slot="header">
+      <el-form ref="form" :model="queryData" class="query">
+        <el-form-item label="功能名称">
+          <el-input size="mini" v-model="queryData.Name" placeholder="功能名称"></el-input>
+        </el-form-item>
+        <el-form-item label="操作">
+          <el-button-group>
+            <jyz-authorizebtn label="查询" code="Query" type="primary" icon="el-icon-search" @click="query()"></jyz-authorizebtn>
+            <jyz-authorizebtn label="新增功能" code="Add" type="primary" @click="add"></jyz-authorizebtn>
+          </el-button-group>
+        </el-form-item>
+      </el-form>
+    </div>
     <el-tree node-key="Id" :data="modules" :props="treeProps" @node-click='nodeClick' default-expand-all :expand-on-click-node='false' ref="tree" slot="aside"></el-tree>
-    <el-button-group class="operate-btngroup" slot="header">
-      <!-- <el-button size="small" type="primary" @click="addAccount()" icon="el-icon-circle-plus">添加</el-button> -->
-      <jyz-authorizebtn label="新增功能" code="Add" type="primary" @click="addOperate"></jyz-authorizebtn>
-    </el-button-group>
     <el-table ref="table" :data="operates" style="width:100%" row-key="Name" height="100%" highlight-current-row>
-      <el-table-column prop="Name" label="名称" align="center"></el-table-column>
+      <el-table-column prop="Name" label="功能名称" align="center"></el-table-column>
       <el-table-column prop="Action" label="Action" align="center"></el-table-column>
       <el-table-column prop="TypeName" label="类型" align="center"></el-table-column>
       <el-table-column prop="Remark" label="备注" align="center"></el-table-column>
-      <el-table-column prop="IsEnable" label="状态" align="center" width="100">
-        <template slot-scope="scope">
-          <el-tag size="mini" type="success" effect="dark" v-if="scope.row.IsEnable">正常</el-tag>
-          <el-tag size="mini" type="danger" effect="dark" v-else>禁用</el-tag>
-        </template>
-      </el-table-column>
       <el-table-column prop="Id" label="操作" width="300" fixed="right">
         <template slot-scope="scope">
-          <jyz-authorizebtn code="Modify" type="primary" icon='el-icon-edit-outline' circle @click="modifyOperate(scope.row.Id)"></jyz-authorizebtn>
+          <jyz-authorizebtn code="Modify" type="primary" icon='el-icon-edit-outline' circle @click="modify(scope.row.Id)"></jyz-authorizebtn>
           <jyz-authorizebtn code="Disable" type="danger" icon='el-icon-delete' circle v-if="scope.row.IsEnable"></jyz-authorizebtn>
           <jyz-authorizebtn code="Enable" type="Success" icon='el-icon-refresh-left' circle v-else></jyz-authorizebtn>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="功能信息" :visible.sync="operateDialogVisible" :close-on-click-modal="false">
-      <el-form :model="operate" ref="operate" :rules="rules">
-        <el-form-item label="名称" :label-width="formLabelWidth" prop="Name">
-          <el-input v-model="operate.Name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="Action" :label-width="formLabelWidth" prop="Action">
-          <el-input v-model="operate.Action" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="类型" :label-width="formLabelWidth" prop="Type">
-          <el-select v-model="operate.Type" placeholder="请选择">
-            <el-option v-for="item in operateTypes" :key="item.Value" :label="item.Name" :value="item.Value">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="备注" :label-width="formLabelWidth" prop="Remark">
-          <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="operate.Remark"></el-input>
-        </el-form-item>
-        <el-form-item label="状态" prop="IsEnable" :label-width="formLabelWidth" v-if="operate.Id">
-          <el-switch v-model="operate.IsEnable"></el-switch>
-        </el-form-item>
-      </el-form>
+    <el-dialog title="编辑信息" :visible.sync="dialogFormVisible" v-if='dialogFormVisible' :close-on-click-modal="false">
+      <el-card class="box-card">
+        <div slot="header" class="clearfix">
+          <span>基础信息</span>
+        </div>
+        <infoview ref="infoview" :id='currentId'></infoview>
+      </el-card>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="operateDialogVisible = false" size="mini">取 消
-        </el-button>
-        <el-button type="primary" @click="submitForm('operate')" size="mini">确 定</el-button>
+        <el-button @click="dialogFormVisible = false" size="mini">取 消</el-button>
+        <el-button type="primary" @click="save()" size="mini">确 定</el-button>
       </div>
     </el-dialog>
   </jyz-container>
 </template>
 
 <script>
+import { infoview } from './components'
 export default {
   props: {},
   data() {
     return {
+      currentId: '',
       modules: [],
       module: '',
       operates: [],
-      operate: {},
-      operateTypes: [],
-      operateDialogVisible: false,
-      formLabelWidth: "120px",
-      rules: {
-        Name: [{ required: true, message: "请输入功能名称", trigger: "blur" }],
-        Action: [{ required: true, message: "请输入功能Action", trigger: "blur" }],
-        Type: [{ required: true, message: "请选择类型", trigger: "blur" }],
-      },
+      dialogFormVisible: false,
       treeProps: {
         label: 'Name',
         children: 'Children'
-      }
+      },
+      queryData: {}
     };
   },
   methods: {
@@ -83,66 +66,47 @@ export default {
         this.modules = res.Data;
       })
     },
-    getOperateTypes() {
-      this.$api.common.getOperateTypes().then(res => {
-        this.operateTypes = res.Data;
-      })
-    },
     getOperates() {
-      this.$api.operate.get(this.module.Id).then(res => {
+      var params = {
+        moduleId: this.module.Id
+      }
+      this.$api.operate.query(params).then(res => {
         this.operates = res.Data;
       })
     },
-    addOperate() {
-      if (!this.module.Id) {
-        this.$message({
-          message: "请选中菜单",
-          type: "warning",
-        });
-        return;
-      }
-      if (this.$refs["operate"]) this.$refs["operate"].resetFields();
-      this.operate = {};
-      this.operateDialogVisible = true;
+    modify(id) {
+      this.currentId = id;
+      this.dialogFormVisible = true;
     },
-    modifyOperate(operateId) {
-      if (this.$refs["operate"]) this.$refs["operate"].resetFields();
-      this.$api.operate.detail(operateId).then((res) => {
-        this.operate = res.Data;
-        this.operateDialogVisible = true;
-      });
-    },
-    submitForm(formName) {
-      var _this = this;
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          _this.operate.ModuleId = _this.module.Id;
-          _this.save();
-          _this.operateDialogVisible = false;
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
+    add() {
+      this.currentId = "";
+      this.dialogFormVisible = true;
     },
     save() {
-      var data = this.operate;
-      if (data.Id) {
-        this.$api.operate.modify(data).then(res => {
+      if (!this.$refs.infoview.isValid()) {
+        return;
+      }
+      let operate = this.$refs.infoview.operate;
+      operate.ModuleId = this.module.Id;
+      debugger
+      if (operate.Id) {
+        this.$api.operate.modify(operate).then(res => {
           this.$message({
             showClose: true,
             message: '保存成功',
             type: 'success'
           });
+          this.dialogFormVisible = false;
           this.getOperates();
         })
       } else {
-        this.$api.operate.add(data).then(res => {
+        this.$api.operate.add(operate).then(res => {
           this.$message({
             showClose: true,
             message: '保存成功',
             type: 'success'
           });
+          this.dialogFormVisible = false;
           this.getOperates();
         })
       }
@@ -159,6 +123,7 @@ export default {
     }
   },
   components: {
+    infoview
   },
   computed: {},
   //实例刚在内存中被创建出来,此时,还没有初始化好 data 和 methods 属性
@@ -170,7 +135,6 @@ export default {
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
   mounted() {
     this.getModules();
-    this.getOperateTypes();
   },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
   beforeUpdate() { },

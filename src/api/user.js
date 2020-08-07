@@ -13,26 +13,55 @@ const user = {
   // 登出
   logout() {},
   // 用户列表列表
-  get(params) {
-    let url = '/user/get';
+  query(data) {
+    let url = '/User/Query';
+    return request({
+      url: url,
+      method: 'post',
+      data,
+    });
+  },
+  // 用户详情
+  detail(params) {
+    let url = '/User/Detail';
     return request({
       url: url,
       method: 'get',
       params,
     });
   },
-  // 用户详情
-  detail(id) {
-    let params = {};
-    params.Id = id;
-    params.Code = 'User_Detail';
-    return request(params);
+  getRoles(data) {
+    let url = '/User/GetRoles';
+    return request({
+      url: url,
+      method: 'Post',
+      data,
+    });
   },
-  // 保存用户
-  save(params) {
-    if (params.Id) params.Code = 'User_Edit';
-    else params.Code = 'User_Add';
-    return request(params);
+  getUserRoles(params) {
+    let url = '/User/GetUserRoles';
+    return request({
+      url: url,
+      method: 'get',
+      params,
+    });
+  },
+  getModuleAndPrivilege(params) {
+    let url = '/User/GetModuleAndPrivilege';
+    return request({
+      url: url,
+      method: 'get',
+      params,
+    });
+  },
+  // 修改用户信息
+  modify(data) {
+    let url = '/User/Modify';
+    return request({
+      url: url,
+      method: 'post',
+      data,
+    });
   },
 };
 export default user;

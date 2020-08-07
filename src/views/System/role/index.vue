@@ -1,35 +1,38 @@
 <template>
   <jyz-container>
-    <el-button-group class="operate-btngroup" slot="header">
-      <jyz-authorizebtn label="新增" code="AddRole" type="primary"></jyz-authorizebtn>
-    </el-button-group>
+    <div slot="header">
+      <el-form ref="form" :model="queryData" class="query">
+        <el-form-item label="角色名称">
+          <el-input size="mini" v-model="queryData.Name" placeholder="角色名称"></el-input>
+        </el-form-item>
+        <el-form-item label="操作">
+          <el-button-group>
+            <jyz-authorizebtn label="查询" code="Query" type="primary" icon="el-icon-search" @click="query()"></jyz-authorizebtn>
+            <jyz-authorizebtn label="新增" code="AddRole" type="primary" icon="el-icon-plus"></jyz-authorizebtn>
+          </el-button-group>
+        </el-form-item>
+      </el-form>
+    </div>
     <el-table :data="roles" row-key="Id" height='100%'>
       <el-table-column prop="Name" label="角色名称"></el-table-column>
       <el-table-column prop="Remark" label="备注"></el-table-column>
-      <el-table-column prop="IsEnable" label="状态" align="center" width="100">
-        <template slot-scope="scope">
-          <el-tag size="mini" type="success" effect="dark" v-if="scope.row.IsEnable">正常</el-tag>
-          <el-tag size="mini" type="danger" effect="dark" v-else>禁用</el-tag>
-        </template>
-      </el-table-column>
       <el-table-column prop="Id" label="操作" width="300" fixed="right">
         <template slot-scope="scope">
           <jyz-authorizebtn code="Modify" type="primary" icon='el-icon-edit-outline' circle @click="modifyRole(scope.row.Id)"></jyz-authorizebtn>
-          <jyz-authorizebtn code="Disable" type="danger" icon='el-icon-delete' circle v-if="scope.row.IsEnable"></jyz-authorizebtn>
-          <jyz-authorizebtn code="Enable" type="Success" icon='el-icon-refresh-left' circle v-else></jyz-authorizebtn>
+          <jyz-authorizebtn code="Remove" type="danger" icon='el-icon-delete' circle></jyz-authorizebtn>
         </template>
       </el-table-column>
     </el-table>
     <el-dialog title="编辑信息" :visible.sync="dialogFormVisible" v-if='dialogFormVisible' :close-on-click-modal="false">
       <el-tabs value="info" type="border-card" v-model='tabValue'>
         <el-tab-pane label="基本信息" name="info">
-          <roleinfo ref="infoview" :roleId='currentRoleId'></roleinfo>
+          <infoview ref="infoview" :roleId='currentRoleId'></infoview>
         </el-tab-pane>
         <el-tab-pane label="用户" name="user">
-          <roleuser ref="userview" :roleId='currentRoleId'></roleuser>
+          <userview ref="userview" :roleId='currentRoleId'></userview>
         </el-tab-pane>
         <el-tab-pane label="权限" name="privilege">
-          <roleprivilege ref="privilegeview" :roleId='currentRoleId'></roleprivilege>
+          <privilegeview ref="privilegeview" :roleId='currentRoleId'></privilegeview>
         </el-tab-pane>
       </el-tabs>
       <div slot="footer" class="dialog-footer">
@@ -67,16 +70,17 @@ export default {
       pageIndex: 1,
       pageSize: 10,
       totalCount: 0,
-      tabValue: 'info'
+      tabValue: 'info',
+      queryData: {}
     };
   },
   methods: {
-    getRoles() {
-      var params = {
+    query() {
+      var data = {
         pageIndex: this.pageIndex,
         pageSize: this.pageSize
       }
-      this.$api.role.get(params).then(res => {
+      this.$api.role.query(data).then(res => {
         this.roles = res.Data.List;
         this.totalCount = res.Data.TotalCount;
       });
@@ -88,6 +92,7 @@ export default {
     save() {
       if (!this.$refs.infoview.isValid()) {
         this.tabValue = 'info';
+        return;
       }
       let role = this.$refs.infoview.role;
       let roleUsers = this.$refs.userview.roleUsers;
@@ -95,7 +100,7 @@ export default {
       roleUsers.forEach(item => {
         userIds.push(item.Id)
       })
-      let privilege = this.$refs.moduleview.getPrivilege();
+      let privilege = this.$refs.privilegeview.getPrivilege();
       let data = {
         Role: role,
         RoleId: this.currentRoleId,
@@ -103,7 +108,6 @@ export default {
         ModuleIds: privilege.ModuleIds,
         OperateIds: privilege.OperateIds,
       }
-      debugger
       this.$api.role.modify(data).then(res => {
         this.$message({
           showClose: true,
@@ -111,16 +115,16 @@ export default {
           type: 'success'
         });
         this.dialogFormVisible = false;
-        this.getRoles();
+        this.query();
       });
     },
     sizeChange(val) {
       this.pageSize = val;
-      this.getUsers();
+      this.query();
     },
     currentChange(val) {
       this.pageIndex = val;
-      this.getUsers();
+      this.query();
     }
   },
   components: {
@@ -135,7 +139,7 @@ export default {
   beforeMount() { },
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
   mounted() {
-    this.getRoles();
+    this.query();
   },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
   beforeUpdate() { },

@@ -23,7 +23,7 @@ export default {
   props: {},
   data() {
     return {
-      menuTree: []
+      menuTree: [],
     };
   },
   methods: {
@@ -44,13 +44,14 @@ export default {
       // this.$store.commit("permission/get_menus", []);
     },
     toggle() {
-      //this.$store.commit("permission/set_MenuCollapse", !this.isCollapse);
+      this.$store.commit("privilege/module_setCollapse", !this.isCollapse);
     }
   },
   components: {},
   computed: {
     ...mapState({
       modules: state => state.privilege.modules,
+      isCollapse: state => state.privilege.isCollapse,
     })
   },
   //实例刚在内存中被创建出来,此时,还没有初始化好 data 和 methods 属性

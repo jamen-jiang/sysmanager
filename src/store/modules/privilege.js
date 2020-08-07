@@ -1,6 +1,7 @@
 const state = {
   modules: [],
   moduleId: '',
+  isCollapse: false,
   currentModule: {},
 };
 
@@ -10,6 +11,10 @@ const mutations = {
   },
   module_select(state, module) {
     state.currentModule = module;
+  },
+  module_setCollapse(state, isCollapse) {
+    debugger;
+    state.isCollapse = isCollapse;
   },
 };
 

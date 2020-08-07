@@ -1,50 +1,53 @@
 <template>
   <jyz-container>
-    <el-button-group class="operate-btngroup" slot="header">
-      <jyz-authorizebtn label="新增用户" code="Add" type="primary" icon="el-icon-plus"></jyz-authorizebtn>
-    </el-button-group>
+    <div slot="header">
+      <el-form ref="form" :model="queryData" class="query">
+        <el-form-item label="用户名">
+          <el-input size="mini" v-model="queryData.Name" placeholder="用户名"></el-input>
+        </el-form-item>
+        <el-form-item label="用户账号">
+          <el-input size="mini" v-model="queryData.UserName" placeholder="用户账号"></el-input>
+        </el-form-item>
+        <el-form-item label="创建日期">
+          <el-date-picker size="mini" v-model="queryData.CreatedOnStart" type="date" placeholder="开始日期"></el-date-picker>
+          -
+          <el-date-picker size="mini" v-model="queryData.CreatedOnEnd" type="date" placeholder="结束日期"></el-date-picker>
+        </el-form-item>
+        <el-form-item label="操作">
+          <el-button-group>
+            <jyz-authorizebtn label="查询" code="Query" type="primary" icon="el-icon-search" @click="query()"></jyz-authorizebtn>
+            <jyz-authorizebtn label="新增" code="Add" type="primary" icon="el-icon-plus"></jyz-authorizebtn>
+          </el-button-group>
+        </el-form-item>
+      </el-form>
+    </div>
     <el-table :data="users" row-key="Id" height='100%'>
       <el-table-column prop="Name" label="用户名"></el-table-column>
       <el-table-column prop="UserName" label="用户账号"></el-table-column>
-      <!-- <el-table-column prop="Role" label="角色" align='center' width="300">
-        <template slot-scope="scope">
-          <el-tag type="success" v-for="r in scope.row.Role" :key='r'>
-            {{r}} 
-          </el-tag>
-        </template>
-      </el-table-column>-->
       <el-table-column prop="Remark" label="备注"></el-table-column>
-      <el-table-column prop="IsEnable" label="状态" align="center" width="100">
-        <template slot-scope="scope">
-          <el-tag size="mini" type="success" effect="dark" v-if="scope.row.IsEnable">正常</el-tag>
-          <el-tag size="mini" type="danger" effect="dark" v-else>禁用</el-tag>
-        </template>
-      </el-table-column>
+      <el-table-column prop="CreatedOn" label="创建日期"></el-table-column>
+      <el-table-column prop="CreatedByName" label="创建人"></el-table-column>
       <el-table-column prop="Id" label="操作" width="300" fixed="right">
         <template slot-scope="scope">
-          <jyz-authorizebtn code="Edit" type="primary" icon='el-icon-edit-outline' circle></jyz-authorizebtn>
-          <jyz-authorizebtn code="Remove" type="danger" icon='el-icon-delete' circle></jyz-authorizebtn>
+          <jyz-authorizebtn code="Modify" type="primary" icon='el-icon-edit-outline' circle @click="modify(scope.row.Id)"></jyz-authorizebtn>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="用户信息" :visible.sync="dialogFormVisible" :close-on-click-modal="false">
-      <el-form :model="user" ref="user" :rules="rules">
-        <el-form-item label="名称" :label-width="formLabelWidth" prop="Name">
-          <el-input v-model="user.Name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="用户账号" :label-width="formLabelWidth" prop="UserName">
-          <el-input v-model="user.UserName" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="备注" :label-width="formLabelWidth" prop="Remark">
-          <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="user.Remark"></el-input>
-        </el-form-item>
-        <el-form-item label="状态" prop="IsEnable" :label-width="formLabelWidth" v-if="user.Id">
-          <el-switch v-model="user.IsEnable"></el-switch>
-        </el-form-item>
-      </el-form>
+    <el-dialog title="编辑信息" :visible.sync="dialogFormVisible" v-if='dialogFormVisible' :close-on-click-modal="false">
+      <el-tabs value="info" type="border-card" v-model='tabValue'>
+        <el-tab-pane label="基本信息" name="info">
+          <infoview ref="infoview" :id='currentId'></infoview>
+        </el-tab-pane>
+        <el-tab-pane label="角色" name="role">
+          <roleview ref="roleview" :id='currentId'></roleview>
+        </el-tab-pane>
+        <el-tab-pane label="权限" name="privilege">
+          <privilegeview ref="privilegeview" :id='currentId'></privilegeview>
+        </el-tab-pane>
+      </el-tabs>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false" size="mini">取 消</el-button>
-        <el-button type="primary" @click="saveUser('user')" size="mini">确 定</el-button>
+        <el-button type="primary" @click="save()" size="mini">确 定</el-button>
       </div>
     </el-dialog>
     <div slot="footer">
@@ -55,12 +58,13 @@
 </template>
 
 <script>
+import { infoview, roleview, privilegeview } from './components'
 export default {
   props: {},
   data() {
     return {
       users: [],
-      user: {},
+      currentId: '',
       dialogFormVisible: false,
       formLabelWidth: "120px",
       rules: {
@@ -76,56 +80,76 @@ export default {
       pageIndex: 1,
       pageSize: 10,
       totalCount: 0,
+      tabValue: 'info',
+      queryData: {
+        Name: '',
+        UserName: '',
+        CreatedOnStart: '',
+        CreatedOnEnd: ''
+      }
     };
   },
   methods: {
-    getUsers() {
+    query() {
       var params = {
         pageIndex: this.pageIndex,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
+        query: this.queryData
       }
-      this.$api.user.get(params).then(res => {
+      this.$api.user.query(params).then(res => {
         this.users = res.Data.List;
         this.totalCount = res.Data.TotalCount;
       });
     },
-    editUser(id) {
-      if (this.$refs["user"]) this.$refs["user"].resetFields();
-      this.$api.user.detail(id).then(res => {
-        this.user = res.Data.User;
-        this.dialogFormVisible = true;
-      });
+    modify(id) {
+      this.currentId = id;
+      this.dialogFormVisible = true;
     },
     addUser() {
       if (this.$refs["user"]) this.$refs["user"].resetFields();
       this.user = {};
       this.dialogFormVisible = true;
     },
-    saveUser(formName) {
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          var params = this.user;
-          this.$api.user.save(params).then(res => {
-            this.$message("保存成功");
-            this.getUsers();
-          });
-          this.dialogFormVisible = false;
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
+    save() {
+      if (!this.$refs.infoview.isValid()) {
+        this.tabValue = 'info';
+        return;
+      }
+      let user = this.$refs.infoview.user;
+      let userRoles = this.$refs.roleview.userRoles;
+      let roleIds = [];
+      userRoles.forEach(item => {
+        roleIds.push(item.Id)
+      })
+      let privilege = this.$refs.privilegeview.getPrivilege();
+      let data = {
+        User: user,
+        Id: this.currentId,
+        RoleIds: roleIds,
+        ModuleIds: privilege.ModuleIds,
+        OperateIds: privilege.OperateIds,
+      }
+      this.$api.user.modify(data).then(res => {
+        this.$message({
+          showClose: true,
+          message: '用户信息修改成功',
+          type: 'success'
+        });
+        this.dialogFormVisible = false;
+        this.getRoles();
       });
     },
     sizeChange(val) {
       this.pageSize = val;
-      this.getUsers();
+      this.query();
     },
     currentChange(val) {
       this.pageIndex = val;
-      this.getUsers();
+      this.query();
     }
   },
   components: {
+    infoview, roleview, privilegeview
   },
   computed: {},
   //实例刚在内存中被创建出来,此时,还没有初始化好 data 和 methods 属性
@@ -136,7 +160,7 @@ export default {
   beforeMount() { },
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
   mounted() {
-    this.getUsers();
+    this.query();
   },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
   beforeUpdate() { },
@@ -149,8 +173,7 @@ export default {
   watch: {}
 };
 </script>
-
-<style scoped>
+<style lang='scss'scoped>
 .el-dialog {
   width: 500px;
 }

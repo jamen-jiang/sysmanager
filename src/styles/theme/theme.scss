@@ -30,10 +30,17 @@
   .el-menu--horizontal .el-menu .el-submenu__title:hover {
     @include theme-menu-hover-style;
   }
-  .el-tree-node.is-current > .el-tree-node__content {
-    border-radius: 2px;
-    background-color: #409eff;
-    color: #fff;
+  .el-tree-node.is-current {
+    .el-tree-node__content {
+      background: $color-primary;
+      color: #fff;
+    }
+  }
+  .el-tree-node.is-current.is-checked {
+    .el-tree-node__content {
+      background: #f5f7fa;
+      color: #606266;
+    }
   }
   .jyz-header {
     .el-menu {

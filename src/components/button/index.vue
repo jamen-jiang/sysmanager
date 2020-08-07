@@ -1,5 +1,5 @@
 <template>
-  <el-button :size="size" :type="type" :loading="loading" :icon="icon" :circle="circle" @click="handleClick">
+  <el-button :size="size" :type="type" :loading="loading" :icon="icon" :circle="circle" :disabled="disabled" @click="handleClick">
     <span v-if="label!==''">
       {{label}}
     </span>

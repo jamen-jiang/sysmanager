@@ -5,14 +5,11 @@ const operate = {
     let url = '/Operate/GetModules';
     return request({
       url: url,
-      method: 'get',
+      method: 'post',
     });
   },
-  get(moduleId) {
-    let url = '/Operate/Get';
-    var params = {
-      moduleId: moduleId,
-    };
+  query(params) {
+    let url = '/Operate/Query';
     return request({
       url: url,
       method: 'get',
@@ -20,11 +17,8 @@ const operate = {
     });
   },
   // 模块详情
-  detail(id) {
+  detail(params) {
     let url = '/Operate/Detail';
-    var params = {
-      id: id,
-    };
     return request({
       url: url,
       method: 'get',

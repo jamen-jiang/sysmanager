@@ -1,8 +1,8 @@
 <template>
   <aside style="width:200px;overflow: auto;">
-    <el-menu :default-active="$route.path" :router="true" unique-opened clss="left-menu">
+    <el-menu :default-active="$route.path" :router="true" clss="left-menu">
       <label v-if="modules!=null && modules.length>0">
-        <menutree :data="modules"></menutree>
+        <jyz-menu :data="modules"></jyz-menu>
       </label>
       <label v-else>
         <div class="menunone">
@@ -17,7 +17,6 @@
 <script>
 import { mapState } from "vuex";
 import { mapMutations } from "vuex";
-import menutree from "../../components/menutree";
 export default {
   name: 'JyzLefter',
   props: {},
@@ -27,7 +26,6 @@ export default {
   methods: {
   },
   components: {
-    menutree
   },
   computed: {
     ...mapState({

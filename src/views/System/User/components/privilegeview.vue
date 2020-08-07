@@ -14,7 +14,7 @@
 <script>
 export default {
   props: {
-    roleId: {
+    id: {
       type: String,
       default: ''
     }
@@ -33,10 +33,10 @@ export default {
   methods: {
     getModuleAndPrivilege() {
       var params = {
-        roleId: this.roleId
+        userId: this.id
       }
       var _this = this;
-      this.$api.role.getModuleAndPrivilege(params).then(res => {
+      this.$api.user.getModuleAndPrivilege(params).then(res => {
         _this.modules = res.Data.Modules;
         _this.selectedModules = res.Data.SelectedModules;
         _this.selectedOperates = res.Data.SelectedOperates;

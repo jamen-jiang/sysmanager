@@ -1,12 +1,32 @@
 <template>
   <div>
-
+    <label v-for="(menu,index) in data" :key="menu.Id">
+      <el-submenu v-if="menu.Children.length>0" :index='menu.Name+""'>
+        <template slot="title">
+          <i :class="menu.Icon"></i>{{menu.Name}}
+        </template>
+        <jyz-menu :data="menu.Children"></jyz-menu>
+      </el-submenu>
+      <el-menu-item v-else :index='menu.VueUri'>
+        <span slot="title">
+          <i :class="menu.Icon"></i>{{menu.Name}}
+        </span>
+      </el-menu-item>
+    </label>
   </div>
 </template>
 
 <script>
+import JyzMenu from "@/components/menu";
 export default {
+  name: "JyzMenu",
   props: {
+    data: {
+      type: Array,
+      default: function () {
+        return []
+      }
+    },
 
   },
   data() {
@@ -18,7 +38,7 @@ export default {
 
   },
   components: {
-
+    JyzMenu
   },
   computed: {
 

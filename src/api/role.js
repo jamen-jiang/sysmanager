@@ -1,12 +1,12 @@
 import request from '@/utils/request';
 
 const role = {
-  get(params) {
-    let url = '/Role/Get';
+  query(data) {
+    let url = '/Role/Query';
     return request({
       url: url,
-      method: 'get',
-      params,
+      method: 'post',
+      data,
     });
   },
   getUsers(params) {

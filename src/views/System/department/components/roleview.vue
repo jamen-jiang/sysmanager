@@ -1,7 +1,7 @@
 <template>
   <div class="roleuser">
-    <el-table :data="users" row-key="Id" height='100%'>
-      <el-table-column prop="Name" label="用户名"></el-table-column>
+    <el-table :data="roles" row-key="Id" height='100%'>
+      <el-table-column prop="Name" label="角色名称"></el-table-column>
       <el-table-column prop="Remark" label="备注"></el-table-column>
       <el-table-column prop="Id" label="操作" width="100">
         <template slot-scope="scope">
@@ -12,11 +12,11 @@
     <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="pageIndex" :page-sizes="[5, 10]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
     </el-pagination>
     <div class="roleuser-footer">
-      <p>已选用户:</p>
+      <p>已选角色:</p>
       <el-card>
         <div class="selected">
-          <el-tag :key="user.Id" v-for="(user,index) in roleUsers" size="small" closable @close="removeUser(index)">
-            {{user.Name}}
+          <el-tag :key="role.Id" v-for="(role,index) in departmentRoles" size="small" closable @close="removeRole(index)">
+            {{role.Name}}
           </el-tag>
         </div>
       </el-card>
@@ -28,7 +28,7 @@
 
 <script>
 export default {
-  name: 'roleuser',
+  name: 'roleview',
   props: {
     id: {
       type: String,
@@ -37,54 +37,55 @@ export default {
   },
   data() {
     return {
-      users: [],
-      roleUsers: [],
+      roles: [],
+      departmentRoles: [],
       pageIndex: 1,
       pageSize: 5,
       totalCount: 0,
     };
   },
   methods: {
-    getUsers() {
-      var params = {
+    getRoles() {
+      var data = {
         pageIndex: this.pageIndex,
         pageSize: this.pageSize
       }
-      this.$api.role.getUsers(params).then(res => {
-        this.users = res.Data.List;
+      this.$api.department.getRoles(data).then(res => {
+        this.roles = res.Data.List;
         this.totalCount = res.Data.TotalCount;
+        if (this.id)
+          this.getDepartmentRoles();
       });
-
     },
-    getRoleUsers() {
+    getDepartmentRoles() {
       var params = {
         id: this.id,
       }
-      this.$api.role.getRoleUsers(params).then(res => {
-        this.roleUsers = res.Data;
+      this.$api.department.getDepartmentRoles(params).then(res => {
+        this.departmentRoles = res.Data;
       });
     },
     sizeChange(val) {
       this.pageSize = val;
-      this.getUsers();
+      this.getRoles();
     },
     currentChange(val) {
       this.pageIndex = val;
-      this.getUsers();
+      this.getRoles();
     },
-    selected(user) {
+    selected(role) {
       let flag = true;
-      for (let i in this.roleUsers) {
-        if (user.Id == this.roleUsers[i].Id) {
+      for (let i in this.departmentRoles) {
+        if (role.Id == this.departmentRoles[i].Id) {
           flag = false;
           return;
         }
       }
       if (flag)
-        this.roleUsers.push(user);
+        this.departmentRoles.push(role);
     },
-    removeUser(index) {
-      this.roleUsers.splice(index, 1);
+    removeRole(index) {
+      this.departmentRoles.splice(index, 1);
     }
   },
   components: {
@@ -107,8 +108,7 @@ export default {
   },
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
   mounted() {
-    this.getUsers();
-    this.getRoleUsers();
+    this.getRoles();
   },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
   beforeUpdate() {

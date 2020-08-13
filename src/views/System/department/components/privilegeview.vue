@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     getModuleOperates() {
-      this.$api.role.getModuleOperates().then(res => {
+      this.$api.department.getModuleOperates().then(res => {
         this.moduleOperates = res.Data;
         if (this.id)
           this.getAuthorizeModuleOperateIds();
@@ -42,7 +42,7 @@ export default {
       var params = {
         id: this.id
       }
-      this.$api.role.getAuthorizeModuleOperateIds(params).then(res => {
+      this.$api.department.getAuthorizeModuleOperateIds(params).then(res => {
         this.selectedModules = res.Data.ModuleIds;
         this.selectedOperates = res.Data.OperateIds;
         this.$refs.tree.setCheckedKeys(this.selectedModules)
@@ -102,17 +102,6 @@ export default {
         this.selectedParent(currentNode.parent)
       }
     },
-    renderContent(h, { node, data, store }) {
-      debugger
-      return (
-        <span class="custom-tree-node">
-          <span>{node.label}</span>
-          <span>
-            <el-button size="mini" type="text" on-click={() => this.append(data)}>Append</el-button>
-            <el-button size="mini" type="text" on-click={() => this.remove(node, data)}>Delete</el-button>
-          </span>
-        </span>);
-    }
   },
   components: {
 

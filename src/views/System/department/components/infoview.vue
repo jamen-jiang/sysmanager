@@ -1,41 +1,31 @@
 <template>
   <div>
-    <el-form :model="module" ref="module" :rules="moduleRules">
-      <el-form-item label="目录" prop="PId" :label-width="formLabelWidth">
+    <el-form :model="department" ref="department" :rules="rules">
+      <el-form-item label="部门组" prop="PId" :label-width="formLabelWidth">
         <el-select ref="pidsel" v-model="selectedName" placeholder="请选择" :disabled='isFirst'>
-          <el-option :value="module.PId" :label="selectedName" style="height: auto">
-            <el-tree :data="moduleCatalogs" default-expand-all check-strictly :expand-on-click-node='false' node-key="Id" ref="tree" highlight-current :props="defaultProps" @node-click="setSelectValue"></el-tree>
+          <el-option :value="department.PId" :label="selectedName" style="height: auto">
+            <el-tree :data="departments" default-expand-all check-strictly :expand-on-click-node='false' node-key="Id" ref="tree" highlight-current :props="defaultProps" @node-click="setSelectValue"></el-tree>
           </el-option>
         </el-select>
-        &nbsp;<el-checkbox v-model="isFirst" label="是否顶级目录" border @change='firstChange'></el-checkbox>
+        &nbsp;<el-checkbox v-model="isFirst" label="是否顶级部门" border @change='firstChange'></el-checkbox>
       </el-form-item>
-      <el-form-item label="模块名称" :label-width="formLabelWidth" prop="Name">
-        <el-input v-model="module.Name" autocomplete="off"></el-input>
+      <el-form-item label="部门名称" :label-width="formLabelWidth" prop="Name">
+        <el-input v-model="department.Name" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="类型" :label-width="formLabelWidth" prop="Type">
-        <el-select v-model="module.Type" placeholder="请选择">
-          <el-option v-for="item in moduleTypes" :key="item.Value" :label="item.Name" :value="item.Value">
-          </el-option>
-        </el-select>
+      <el-form-item label="电话号码" :label-width="formLabelWidth" prop="Telephone">
+        <el-input v-model="department.Telephone" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="Controller" :label-width="formLabelWidth" prop="Controller">
-        <el-input v-model="module.Controller" autocomplete="off"></el-input>
+      <el-form-item label="传真" :label-width="formLabelWidth" prop="Fax">
+        <el-input v-model="department.Fax" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="VueUri" :label-width="formLabelWidth" prop="VueUri">
-        <el-input v-model="module.VueUri" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="图标" :label-width="formLabelWidth" prop="Icon">
-        <el-input v-model="module.Icon" autocomplete="off">
-          <template slot="prepend">
-            <i :class="module.Icon"></i>
-          </template>
-        </el-input>
+      <el-form-item label="邮箱" :label-width="formLabelWidth" prop="Email">
+        <el-input v-model="department.Email" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="排序" :label-width="formLabelWidth" prop="Sort">
-        <el-input v-model="module.Sort" autocomplete="off"></el-input>
+        <el-input v-model="department.Sort" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="备注" :label-width="formLabelWidth" prop="Remark">
-        <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="module.Remark"></el-input>
+        <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="department.Remark"></el-input>
       </el-form-item>
     </el-form>
   </div>
@@ -44,21 +34,19 @@
 <script>
 export default {
   props: {
-    moduleId: {
+    id: {
       type: String,
       default: ''
     }
   },
   data() {
     return {
-      module: {
+      department: {
       },
-      moduleCatalogs: [],
-      moduleTypes: [],
+      departments: [],
       formLabelWidth: "100px",
-      moduleRules: {
-        Name: [{ required: true, message: "请输入模块名称", trigger: "blur" }],
-        Type: [{ required: true, message: "请选择类型", trigger: "blur" }],
+      rules: {
+        Name: [{ required: true, message: "请输入部门名称", trigger: "blur" }],
       },
       defaultProps: {
         children: "Children",
@@ -71,38 +59,36 @@ export default {
   methods: {
     detail() {
       var params = {
-        Id: this.moduleId
+        Id: this.id
       }
-      this.$api.module.detail(params).then(res => {
-        this.module = res.Data;
-        if (!this.module.PId) {
+      this.$api.department.detail(params).then(res => {
+        this.department = res.Data;
+        if (!this.department.PId) {
           this.isFirst = true;
           return
         }
-        var node = this.$refs.tree.getNode(this.module.PId)
+        var node = this.$refs.tree.getNode(this.department.PId)
         this.selectedId = node.key;
         this.selectedName = node.label;
         // console.log(this.valueTitle)
         this.$refs.tree.setCurrentKey(this.selectedId)
       })
     },
-    getModuleCatalogs() {
-      this.$api.common.getModuleCatalogs().then(res => {
-        this.moduleCatalogs = res.Data;
-      });
-    },
-    getModuleTypes() {
-      this.$api.common.getModuleTypes().then(res => {
-        this.moduleTypes = res.Data;
+    getDepartments() {
+      this.$api.common.getDepartments().then(res => {
+        this.departments = res.Data;
+        if (this.id) {
+          this.detail();
+        }
       });
     },
     firstChange(vaule) {
       if (vaule)
-        this.module.PId = null;
+        this.department.PId = null;
     },
     isValid() {
       let flag = true;
-      this.$refs['module'].validate(valid => {
+      this.$refs['department'].validate(valid => {
         if (!valid) {
           flag = false;
         }
@@ -110,7 +96,7 @@ export default {
       return flag;
     },
     setSelectValue(data, node) {
-      this.module.PId = node.key
+      this.department.PId = node.key
       this.selectedName = data.Name
       this.$refs.pidsel.blur();
       //let res = this.$refs.tree.getCheckedNodes(false, true); //true，1. 是否只是叶子节点 2.选择的时候不包含父节点）
@@ -137,11 +123,7 @@ export default {
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
   mounted() {
     //this.$refs.module.resetFields();
-    this.getModuleCatalogs();
-    this.getModuleTypes();
-    if (this.moduleId) {
-      this.detail();
-    }
+    this.getDepartments();
   },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
   beforeUpdate() {
@@ -164,3 +146,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.el-select-dropdown__item.hover,
+.el-select-dropdown__item:hover {
+  background-color: #fff;
+}
+.el-select-dropdown.is-multiple .el-select-dropdown__item.selected.hover {
+  background-color: #fff;
+}
+</style>

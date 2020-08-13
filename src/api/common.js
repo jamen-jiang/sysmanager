@@ -22,5 +22,19 @@ const common = {
       method: 'get',
     });
   },
+  getModules() {
+    let url = '/Common/GetModules';
+    return request({
+      url: url,
+      method: 'get',
+    });
+  },
+  getDepartments() {
+    let url = '/Common/GetDepartments';
+    return request({
+      url: url,
+      method: 'get',
+    });
+  },
 };
 export default common;

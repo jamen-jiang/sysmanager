@@ -25,8 +25,15 @@ const role = {
       params,
     });
   },
-  getModuleAndPrivilege(params) {
-    let url = '/Role/GetModuleAndPrivilege';
+  getModuleOperates() {
+    let url = '/Role/GetModuleOperates';
+    return request({
+      url: url,
+      method: 'get',
+    });
+  },
+  getAuthorizeModuleOperateIds(params) {
+    let url = '/Role/getAuthorizeModuleOperateIds';
     return request({
       url: url,
       method: 'get',

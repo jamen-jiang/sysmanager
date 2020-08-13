@@ -2,137 +2,125 @@
   <jyz-container>
     <div slot="header">
       <el-form ref="form" :model="queryData" class="query">
-        <el-form-item label="功能名称">
-          <el-input size="mini" v-model="queryData.Name" placeholder="功能名称"></el-input>
+        <el-form-item label="部门名称">
+          <el-input size="mini" v-model="queryData.Name" placeholder="部门名称"></el-input>
         </el-form-item>
         <el-form-item label="操作">
           <el-button-group>
             <jyz-authorizebtn label="查询" code="Query" type="primary" icon="el-icon-search" @click="query()"></jyz-authorizebtn>
-            <jyz-authorizebtn label="新增功能" code="Add" type="primary" @click="add"></jyz-authorizebtn>
+            <jyz-authorizebtn label="新增" code="Add" type="primary" icon="el-icon-plus" @click="add()"></jyz-authorizebtn>
           </el-button-group>
         </el-form-item>
       </el-form>
     </div>
-    <el-tree node-key="Id" :data="modules" :props="treeProps" @node-click='nodeClick' default-expand-all :expand-on-click-node='false' ref="tree" slot="aside" highlight-current></el-tree>
-    <el-table ref="table" :data="operates" style="width:100%" row-key="Id" height="100%" highlight-current-row>
-      <el-table-column prop="Name" label="功能名称" align="center"></el-table-column>
-      <el-table-column prop="Action" label="Action" align="center"></el-table-column>
-      <el-table-column prop="TypeName" label="类型" align="center"></el-table-column>
-      <el-table-column prop="ModuleName" label="菜单" align="center"></el-table-column>
+    <el-table ref="table" :data="departments" style="width:100%" row-key="Name" height="100%" :tree-props="{children: 'Children', hasChildren: 'hasChildren'}" highlight-current-row default-expand-all>
+      <el-table-column prop="Name" label="部门名称" align="center"></el-table-column>
+      <el-table-column prop="Telephone" label="电话号码" align="center"></el-table-column>
+      <el-table-column prop="Fax" label="传真" align="center"></el-table-column>
+      <el-table-column prop="Email" label="邮箱" align="center"></el-table-column>
+      <el-table-column prop="Sort" label="排序" align="center"></el-table-column>
+      <el-table-column prop="Remark" label="备注" align="center"></el-table-column>
       <el-table-column prop="CreatedOn" label="创建日期"></el-table-column>
       <el-table-column prop="CreatedByName" label="创建人"></el-table-column>
-      <el-table-column prop="Remark" label="备注" align="center"></el-table-column>
-      <el-table-column prop="Id" label="操作" width="300" fixed="right">
+      <el-table-column prop="Id" label="操作" align="left" width="200" fixed="right">
         <template slot-scope="scope">
           <jyz-authorizebtn code="Modify" type="primary" icon='el-icon-edit-outline' circle @click="modify(scope.row.Id)"></jyz-authorizebtn>
-          <jyz-authorizebtn code="Disable" type="danger" icon='el-icon-delete' circle v-if="scope.row.IsEnable"></jyz-authorizebtn>
-          <jyz-authorizebtn code="Enable" type="Success" icon='el-icon-refresh-left' circle v-else></jyz-authorizebtn>
+          <jyz-authorizebtn code="Remove" type="danger" icon='el-icon-delete' circle></jyz-authorizebtn>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="编辑信息" :visible.sync="dialogFormVisible" v-if='dialogFormVisible' :close-on-click-modal="false" top="0" width="400px">
-      <infoview ref="infoview" :id='currentId'></infoview>
+    <el-dialog title="编辑信息" :visible.sync="dialogFormVisible" v-if='dialogFormVisible' :close-on-click-modal="false" top="0">
+      <el-tabs value="info" type="border-card" v-model='tabValue'>
+        <el-tab-pane label="基本信息" name="info">
+          <infoview ref="infoview" :id='currentId'></infoview>
+        </el-tab-pane>
+        <el-tab-pane label="角色" name="role">
+          <roleview ref="roleview" :id='currentId'></roleview>
+        </el-tab-pane>
+        <el-tab-pane label="权限" name="privilege">
+          <privilegeview ref="privilegeview" :id='currentId'></privilegeview>
+        </el-tab-pane>
+      </el-tabs>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false" size="mini">取 消</el-button>
         <el-button type="primary" @click="save()" size="mini">确 定</el-button>
       </div>
     </el-dialog>
-    <div slot="footer">
-      <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="pageIndex" :page-sizes="[10, 20, 30, 40,50,60,70,80,90,100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
-      </el-pagination>
-    </div>
   </jyz-container>
 </template>
 
 <script>
-import { infoview } from './components'
+import { infoview, roleview, privilegeview } from './components'
 export default {
   props: {},
   data() {
     return {
       currentId: '',
-      modules: [],
-      module: {},
-      operates: [],
+      departments: [],
       dialogFormVisible: false,
-      treeProps: {
-        label: 'Name',
-        children: 'Children'
-      },
-      queryData: {},
-      pageIndex: 1,
-      pageSize: 10,
-      totalCount: 0,
+      tabValue: 'info',
+      queryData: {}
     };
   },
   methods: {
-    getModules() {
-      this.$api.operate.getModules({}).then(res => {
-        this.modules = res.Data;
-        this.query();
-      })
-    },
     query() {
-      this.queryData.ModuleId = this.module.Id;
-      var params = {
-        pageIndex: this.pageIndex,
-        pageSize: this.pageSize,
-        query: this.queryData
-      }
-      this.$api.operate.query(params).then(res => {
-        this.operates = res.Data.List;
-        this.totalCount = res.Data.TotalCount;
-      })
+      this.$api.department.query(this.queryData).then((res) => {
+        this.departments = res.Data;
+      });
     },
     modify(id) {
       this.currentId = id;
+      this.tabValue = 'info';
       this.dialogFormVisible = true;
     },
     add() {
       this.currentId = "";
+      this.tabValue = 'info';
       this.dialogFormVisible = true;
     },
     save() {
       if (!this.$refs.infoview.isValid()) {
         return;
       }
-      debugger
-      let operate = this.$refs.infoview.operate;
-      if (operate.Id) {
-        this.$api.operate.modify(operate).then(res => {
+      let department = this.$refs.infoview.department;
+      let departmentRoles = this.$refs.roleview.departmentRoles;
+      let roleIds = [];
+      departmentRoles.forEach(item => {
+        roleIds.push(item.Id)
+      })
+      let privilege = this.$refs.privilegeview.getPrivilege();
+      let data = {
+        Department: department,
+        RoleIds: roleIds,
+        ModuleIds: privilege.ModuleIds,
+        OperateIds: privilege.OperateIds,
+      }
+      if (this.currentId) {
+        data.Id = this.currentId;
+        this.$api.department.modify(data).then(res => {
           this.$message({
-            message: '保存成功',
+            showClose: true,
+            message: '修改成功',
             type: 'success'
           });
           this.dialogFormVisible = false;
           this.query();
         })
       } else {
-        this.$api.operate.add(operate).then(res => {
+        this.$api.department.add(data).then(res => {
           this.$message({
-            message: '保存成功',
+            showClose: true,
+            message: '添加成功',
             type: 'success'
           });
           this.dialogFormVisible = false;
           this.query();
         })
       }
-    },
-    nodeClick(data, node) {
-      this.module = node.data;
-      this.query();
-    },
-    sizeChange(val) {
-      this.pageSize = val;
-      this.query();
-    },
-    currentChange(val) {
-      this.pageIndex = val;
-      this.query();
-    },
+    }
   },
   components: {
-    infoview
+    infoview, roleview, privilegeview
   },
   computed: {},
   //实例刚在内存中被创建出来,此时,还没有初始化好 data 和 methods 属性
@@ -143,7 +131,7 @@ export default {
   beforeMount() { },
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
   mounted() {
-    this.getModules();
+    this.query();
   },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
   beforeUpdate() { },

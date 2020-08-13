@@ -1,6 +1,6 @@
 <template>
   <div class="rolemodule">
-    <el-tree ref="tree" :data="modules" :check-strictly="true" show-checkbox node-key="Id" :expand-on-click-node='false' default-expand-all :props="defaultProps" @check='check'>
+    <el-tree ref="tree" :data="moduleOperates" :check-strictly="true" show-checkbox node-key="Id" :expand-on-click-node='false' default-expand-all :props="defaultProps" @check='check'>
       <span class="custom-tree-node" slot-scope="{ node, data }">
         <span>{{ node.label }}</span>
         <el-checkbox-group v-model="selectedOperates" size="mini" v-if="data.Children.length<=0">
@@ -21,7 +21,7 @@ export default {
   },
   data() {
     return {
-      modules: [],
+      moduleOperates: [],
       defaultProps: {
         children: 'Children',
         label: 'Name'
@@ -31,16 +31,21 @@ export default {
     };
   },
   methods: {
-    getModuleAndPrivilege() {
+    getModuleOperates() {
+      this.$api.user.getModuleOperates().then(res => {
+        this.moduleOperates = res.Data;
+        if (this.id)
+          this.getAuthorizeModuleOperateIds();
+      });
+    },
+    getAuthorizeModuleOperateIds() {
       var params = {
-        userId: this.id
+        id: this.id
       }
-      var _this = this;
-      this.$api.user.getModuleAndPrivilege(params).then(res => {
-        _this.modules = res.Data.Modules;
-        _this.selectedModules = res.Data.SelectedModules;
-        _this.selectedOperates = res.Data.SelectedOperates;
-        _this.$refs.tree.setCheckedKeys(_this.selectedModules)
+      this.$api.user.getAuthorizeModuleOperateIds(params).then(res => {
+        this.selectedModules = res.Data.ModuleIds;
+        this.selectedOperates = res.Data.OperateIds;
+        this.$refs.tree.setCheckedKeys(this.selectedModules)
       });
     },
     getPrivilege() {
@@ -129,7 +134,7 @@ export default {
   },
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
   mounted() {
-    this.getModuleAndPrivilege();
+    this.getModuleOperates();
   },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
   beforeUpdate() {

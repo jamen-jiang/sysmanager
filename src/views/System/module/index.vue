@@ -25,6 +25,8 @@
       <el-table-column prop="VueUri" label="VueUri" align="center"></el-table-column>
       <el-table-column prop="Sort" label="排序" align="center"></el-table-column>
       <el-table-column prop="Remark" label="备注" align="center"></el-table-column>
+      <el-table-column prop="CreatedOn" label="创建日期"></el-table-column>
+      <el-table-column prop="CreatedByName" label="创建人"></el-table-column>
       <el-table-column prop="Id" label="操作" align="left" width="200" fixed="right">
         <template slot-scope="scope">
           <jyz-authorizebtn code="Modify" type="primary" icon='el-icon-edit-outline' circle @click="modifyModule(scope.row.Id)"></jyz-authorizebtn>
@@ -32,13 +34,8 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="编辑信息" :visible.sync="dialogFormVisible" v-if='dialogFormVisible' :close-on-click-modal="false" top="0" lock-scroll="false">
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span>基础信息</span>
-        </div>
-        <infoview ref="infoview" :moduleId='currentModuleId'></infoview>
-      </el-card>
+    <el-dialog title="编辑信息" :visible.sync="dialogFormVisible" v-if='dialogFormVisible' :close-on-click-modal="false" top="0" width='520px'>
+      <infoview ref="infoview" :moduleId='currentModuleId'></infoview>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false" size="mini">取 消</el-button>
         <el-button type="primary" @click="save()" size="mini">确 定</el-button>
@@ -62,7 +59,7 @@ export default {
   },
   methods: {
     query() {
-      this.$api.module.query().then((res) => {
+      this.$api.module.query(this.queryData).then((res) => {
         this.modules = res.Data;
       });
     },
@@ -141,8 +138,5 @@ export default {
 }
 .btngroup {
   padding: 20px;
-}
-.el-dialog {
-  width: 600px;
 }
 </style>

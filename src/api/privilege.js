@@ -1,8 +1,8 @@
 import request from '@/utils/request';
 
 const privilege = {
-  getAuthorizeModules() {
-    let url = '/Privilege/GetAuthorizeModules';
+  getAuthorizeModuleOperates() {
+    let url = '/Privilege/GetAuthorizeModuleOperates';
     return request({
       url: url,
       method: 'get',

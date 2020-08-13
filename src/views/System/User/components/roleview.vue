@@ -12,7 +12,7 @@
     <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="pageIndex" :page-sizes="[5, 10]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalCount">
     </el-pagination>
     <div class="roleuser-footer">
-      <p>已选用户:</p>
+      <p>已选角色:</p>
       <el-card>
         <div class="selected">
           <el-tag :key="role.Id" v-for="(role,index) in userRoles" size="small" closable @close="removeRole(index)">

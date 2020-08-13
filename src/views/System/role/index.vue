@@ -16,6 +16,8 @@
     <el-table :data="roles" row-key="Id" height='100%'>
       <el-table-column prop="Name" label="角色名称"></el-table-column>
       <el-table-column prop="Remark" label="备注"></el-table-column>
+      <el-table-column prop="CreatedOn" label="创建日期"></el-table-column>
+      <el-table-column prop="CreatedByName" label="创建人"></el-table-column>
       <el-table-column prop="Id" label="操作" width="300" fixed="right">
         <template slot-scope="scope">
           <jyz-authorizebtn code="Modify" type="primary" icon='el-icon-edit-outline' circle @click="modifyRole(scope.row.Id)"></jyz-authorizebtn>
@@ -23,16 +25,16 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="编辑信息" :visible.sync="dialogFormVisible" v-if='dialogFormVisible' :close-on-click-modal="false">
+    <el-dialog title="编辑信息" :visible.sync="dialogFormVisible" v-if='dialogFormVisible' :close-on-click-modal="false" top="0">
       <el-tabs value="info" type="border-card" v-model='tabValue'>
         <el-tab-pane label="基本信息" name="info">
-          <infoview ref="infoview" :roleId='currentRoleId'></infoview>
+          <infoview ref="infoview" :id='currentId'></infoview>
         </el-tab-pane>
         <el-tab-pane label="用户" name="user">
-          <userview ref="userview" :roleId='currentRoleId'></userview>
+          <userview ref="userview" :id='currentId'></userview>
         </el-tab-pane>
         <el-tab-pane label="权限" name="privilege">
-          <privilegeview ref="privilegeview" :roleId='currentRoleId'></privilegeview>
+          <privilegeview ref="privilegeview" :id='currentId'></privilegeview>
         </el-tab-pane>
       </el-tabs>
       <div slot="footer" class="dialog-footer">
@@ -53,7 +55,7 @@ export default {
   data() {
     return {
       roles: [],
-      currentRoleId: '',
+      currentId: '',
       user: {},
       dialogFormVisible: false,
       formLabelWidth: "120px",
@@ -78,7 +80,8 @@ export default {
     query() {
       var data = {
         pageIndex: this.pageIndex,
-        pageSize: this.pageSize
+        pageSize: this.pageSize,
+        query: this.queryData
       }
       this.$api.role.query(data).then(res => {
         this.roles = res.Data.List;
@@ -86,7 +89,7 @@ export default {
       });
     },
     modifyRole(id) {
-      this.currentRoleId = id;
+      this.currentId = id;
       this.dialogFormVisible = true;
     },
     save() {
@@ -103,7 +106,7 @@ export default {
       let privilege = this.$refs.privilegeview.getPrivilege();
       let data = {
         Role: role,
-        RoleId: this.currentRoleId,
+        Id: this.currentId,
         UserIds: userIds,
         ModuleIds: privilege.ModuleIds,
         OperateIds: privilege.OperateIds,

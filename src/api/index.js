@@ -11,6 +11,7 @@ import operate from '@/api/operate';
 import role from '@/api/role';
 import logoperate from '@/api/logoperate';
 import loglogin from '@/api/loglogin';
+import department from '@/api/department';
 
 // 导出接口
 export default {
@@ -22,5 +23,6 @@ export default {
   role,
   logoperate,
   loglogin,
+  department,
   // ……
 };

@@ -4,17 +4,17 @@
       <slot name="header" />
     </div>
     <div class="jyz-container-main">
-
       <el-aside v-if="$slots.aside" class='jyz-container-main-aside' ref="aside" style="width:240px">
         <slot name="aside" />
       </el-aside>
       <div class="jyz-container-main-body" ref="body">
         <slot />
+        <div v-if="$slots.footer" class="jyz-container-main-body-footer" ref="footer">
+          <slot name="footer" />
+        </div>
       </div>
     </div>
-    <div v-if="$slots.footer" class="jyz-container-footer" ref="footer">
-      <slot name="footer" />
-    </div>
+
   </div>
 </template>
 

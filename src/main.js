@@ -34,7 +34,7 @@ router.beforeEach((to, from, next) => {
     } else {
       //动态生成路由
       if (store.state.privilege.modules.length <= 0) {
-        api.privilege.getAuthorizeModules().then(res => {
+        api.privilege.getAuthorizeModuleOperates().then(res => {
           store.commit('privilege/modules_set', res.Data);
           setRouter(store.state.privilege.modules);
         });

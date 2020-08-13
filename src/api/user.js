@@ -46,12 +46,27 @@ const user = {
       params,
     });
   },
-  getModuleAndPrivilege(params) {
-    let url = '/User/GetModuleAndPrivilege';
+  getModuleOperates() {
+    let url = '/User/GetModuleOperates';
+    return request({
+      url: url,
+      method: 'get',
+    });
+  },
+  getAuthorizeModuleOperateIds(params) {
+    let url = '/User/getAuthorizeModuleOperateIds';
     return request({
       url: url,
       method: 'get',
       params,
+    });
+  },
+  getDepartments(data) {
+    let url = '/User/GetDepartments';
+    return request({
+      url: url,
+      method: 'post',
+      data,
     });
   },
   // 修改用户信息

@@ -14,7 +14,7 @@
 <script>
 export default {
   props: {
-    roleId: {
+    id: {
       type: String,
       default: ''
     }
@@ -34,7 +34,7 @@ export default {
   methods: {
     detail() {
       var params = {
-        id: this.roleId,
+        id: this.id,
       }
       this.$api.role.detail(params).then(res => {
         this.role = res.Data;
@@ -71,7 +71,7 @@ export default {
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
   mounted() {
     //this.$refs["role"].resetFields();
-    if (this.roleId) {
+    if (this.id) {
       this.detail();
     }
   },

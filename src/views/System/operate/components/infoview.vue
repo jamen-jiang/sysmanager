@@ -1,6 +1,13 @@
 <template>
   <div>
     <el-form :model="operate" ref="operate" :rules="rules">
+      <el-form-item label="菜单" prop="ModuleId" :label-width="formLabelWidth">
+        <el-select ref="pidsel" v-model="selectedName" placeholder="请选择">
+          <el-option :value="operate.ModuleId" :label="selectedName" style="height: auto">
+            <el-tree :data="modules" default-expand-all check-strictly :expand-on-click-node='false' node-key="Id" ref="tree" highlight-current :props="defaultProps" @node-click="setSelectValue"></el-tree>
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="名称" :label-width="formLabelWidth" prop="Name">
         <el-input v-model="operate.Name" autocomplete="off"></el-input>
       </el-form-item>
@@ -32,12 +39,19 @@ export default {
     return {
       operate: {},
       operateTypes: [],
-      formLabelWidth: "120px",
+      modules: [],
+      formLabelWidth: "80px",
       rules: {
+        ModuleId: [{ required: true, message: "请选择菜单", trigger: "blur" }],
         Name: [{ required: true, message: "请输入功能名称", trigger: "blur" }],
         Action: [{ required: true, message: "请输入功能Action", trigger: "blur" }],
         Type: [{ required: true, message: "请选择类型", trigger: "blur" }],
-      }
+      },
+      defaultProps: {
+        children: "Children",
+        label: "Name"
+      },
+      selectedName: '',
     };
   },
   methods: {
@@ -47,11 +61,24 @@ export default {
       }
       this.$api.operate.detail(params).then(res => {
         this.operate = res.Data;
+        var node = this.$refs.tree.getNode(this.operate.ModuleId)
+        this.selectedId = node.key;
+        this.selectedName = node.label;
+        this.$refs.tree.setCurrentKey(this.selectedId)
       })
     },
     getOperateTypes() {
       this.$api.common.getOperateTypes().then(res => {
         this.operateTypes = res.Data;
+
+      });
+    },
+    getModules() {
+      this.$api.common.getModules().then(res => {
+        this.modules = res.Data;
+        if (this.id) {
+          this.detail();
+        }
       });
     },
     isValid() {
@@ -63,6 +90,16 @@ export default {
       });
       return flag;
     },
+    setSelectValue(data, node) {
+      if (node.childNodes.length <= 0) {
+        this.operate.ModuleId = node.key
+        this.selectedName = data.Name
+        this.$refs.pidsel.blur();
+      } else {
+        if (this.operate.ModuleId)
+          this.$refs.tree.setCurrentKey(this.operate.ModuleId)
+      }
+    }
   },
   components: {
 
@@ -86,9 +123,7 @@ export default {
   mounted() {
     //this.$refs.module.resetFields();
     this.getOperateTypes();
-    if (this.id) {
-      this.detail();
-    }
+    this.getModules();
   },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
   beforeUpdate() {

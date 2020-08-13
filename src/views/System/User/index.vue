@@ -21,20 +21,22 @@
         </el-form-item>
       </el-form>
     </div>
+    <el-tree node-key="Id" :data="departments" :props="treeProps" @node-click='nodeClick' default-expand-all :expand-on-click-node='false' ref="tree" slot="aside"></el-tree>
     <el-table :data="users" row-key="Id" height='100%'>
-      <el-table-column prop="Name" label="用户名"></el-table-column>
-      <el-table-column prop="UserName" label="用户账号"></el-table-column>
+      <el-table-column prop="UserName" label="登录账号"></el-table-column>
+      <el-table-column prop="Name" label="姓名"></el-table-column>
+      <el-table-column prop="DepartmentName" label="部门"></el-table-column>
       <el-table-column prop="Remark" label="备注"></el-table-column>
       <el-table-column prop="CreatedOn" label="创建日期"></el-table-column>
       <el-table-column prop="CreatedByName" label="创建人"></el-table-column>
-      <el-table-column prop="Id" label="操作" width="300" fixed="right">
+      <el-table-column prop="Id" label="操作" width="100" fixed="right">
         <template slot-scope="scope">
           <jyz-authorizebtn code="Modify" type="primary" icon='el-icon-edit-outline' circle @click="modify(scope.row.Id)"></jyz-authorizebtn>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog title="编辑信息" :visible.sync="dialogFormVisible" v-if='dialogFormVisible' :close-on-click-modal="false">
-      <el-tabs value="info" type="border-card" v-model='tabValue'>
+    <el-dialog title="编辑信息" :visible.sync="dialogFormVisible" v-if='dialogFormVisible' :close-on-click-modal="false" top="0">
+      <el-tabs type="border-card" v-model='tabValue'>
         <el-tab-pane label="基本信息" name="info">
           <infoview ref="infoview" :id='currentId'></infoview>
         </el-tab-pane>
@@ -63,6 +65,8 @@ export default {
   props: {},
   data() {
     return {
+      departments: [],
+      department: {},
       users: [],
       currentId: '',
       dialogFormVisible: false,
@@ -86,11 +90,22 @@ export default {
         UserName: '',
         CreatedOnStart: '',
         CreatedOnEnd: ''
-      }
+      },
+      treeProps: {
+        label: 'Name',
+        children: 'Children'
+      },
     };
   },
   methods: {
+    getDepartments() {
+      this.$api.user.getDepartments({}).then(res => {
+        this.departments = res.Data;
+        this.query();
+      })
+    },
     query() {
+      this.queryData.DepartmentId = this.department.Id;
       var params = {
         pageIndex: this.pageIndex,
         pageSize: this.pageSize,
@@ -103,9 +118,10 @@ export default {
     },
     modify(id) {
       this.currentId = id;
+      this.tabValue = 'info';
       this.dialogFormVisible = true;
     },
-    addUser() {
+    add() {
       if (this.$refs["user"]) this.$refs["user"].resetFields();
       this.user = {};
       this.dialogFormVisible = true;
@@ -136,7 +152,7 @@ export default {
           type: 'success'
         });
         this.dialogFormVisible = false;
-        this.getRoles();
+        this.query();
       });
     },
     sizeChange(val) {
@@ -145,6 +161,10 @@ export default {
     },
     currentChange(val) {
       this.pageIndex = val;
+      this.query();
+    },
+    nodeClick(data, node) {
+      this.department = node.data;
       this.query();
     }
   },
@@ -160,7 +180,7 @@ export default {
   beforeMount() { },
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
   mounted() {
-    this.query();
+    this.getDepartments();
   },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
   beforeUpdate() { },

@@ -1,6 +1,13 @@
 <template>
   <div>
     <el-form :model="user" ref="user" :rules="rules">
+      <el-form-item label="部门" prop="DepartmentId" :label-width="formLabelWidth">
+        <el-select ref="pidsel" v-model="selectedName" placeholder="请选择">
+          <el-option :value="user.DepartmentId" :label="selectedName" style="height: auto">
+            <el-tree :data="departments" default-expand-all check-strictly :expand-on-click-node='false' node-key="Id" ref="tree" highlight-current :props="defaultProps" @node-click="setSelectValue"></el-tree>
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="用户名称" :label-width="formLabelWidth" prop="Name">
         <el-input v-model="user.Name" autocomplete="off"></el-input>
       </el-form-item>
@@ -25,6 +32,7 @@ export default {
   data() {
     return {
       user: {},
+      departments: [],
       formLabelWidth: "120px",
       rules: {
         Name: [
@@ -36,6 +44,11 @@ export default {
           { min: 5, max: 20, message: "长度在 5 到 20 个字符", trigger: "blur" }
         ]
       },
+      defaultProps: {
+        children: "Children",
+        label: "Name"
+      },
+      selectedName: ''
     };
   },
   methods: {
@@ -45,6 +58,18 @@ export default {
       }
       this.$api.user.detail(params).then(res => {
         this.user = res.Data;
+        var node = this.$refs.tree.getNode(this.user.DepartmentId)
+        this.selectedId = node.key;
+        this.selectedName = node.label;
+        this.$refs.tree.setCurrentKey(this.selectedId)
+      });
+    },
+    getDepartments() {
+      this.$api.common.getDepartments().then(res => {
+        this.departments = res.Data;
+        if (this.id) {
+          this.detail();
+        }
       });
     },
     isValid() {
@@ -55,6 +80,19 @@ export default {
         }
       });
       return flag;
+    },
+    setSelectValue(data, node) {
+      this.user.DepartmentId = node.key
+      this.selectedName = data.Name
+      this.$refs.tree.setCurrentKey(this.user.DepartmentId)
+      // if (node.childNodes.length <= 0) {
+      //   this.user.DepartmentId = node.key
+      //   this.selectedName = data.Name
+      //   this.$refs.pidsel.blur();
+      // } else {
+      //   if (this.user.DepartmentId)
+      //     this.$refs.tree.setCurrentKey(this.user.DepartmentId)
+      // }
     }
   },
   components: {
@@ -77,10 +115,7 @@ export default {
   },
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
   mounted() {
-    //this.$refs["role"].resetFields();
-    if (this.id) {
-      this.detail();
-    }
+    this.getDepartments();
   },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
   beforeUpdate() {

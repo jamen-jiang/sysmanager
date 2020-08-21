@@ -32,7 +32,7 @@ export default {
   },
   methods: {
     getModuleOperates() {
-      this.$api.department.getModuleOperates().then(res => {
+      this.$api.organization.getModuleOperates().then(res => {
         this.moduleOperates = res.Data;
         if (this.id)
           this.getAuthorizeModuleOperateIds();
@@ -42,7 +42,7 @@ export default {
       var params = {
         id: this.id
       }
-      this.$api.department.getAuthorizeModuleOperateIds(params).then(res => {
+      this.$api.organization.getAuthorizeModuleOperateIds(params).then(res => {
         this.selectedModules = res.Data.ModuleIds;
         this.selectedOperates = res.Data.OperateIds;
         this.$refs.tree.setCheckedKeys(this.selectedModules)

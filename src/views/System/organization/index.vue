@@ -13,8 +13,9 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-table ref="table" :data="departments" style="width:100%" row-key="Name" height="100%" :tree-props="{children: 'Children', hasChildren: 'hasChildren'}" highlight-current-row default-expand-all>
-      <el-table-column prop="Name" label="部门名称" align="center"></el-table-column>
+    <el-table ref="table" :data="list" style="width:100%" row-key="Name" height="100%" :tree-props="{children: 'Children', hasChildren: 'hasChildren'}" highlight-current-row default-expand-all>
+      <el-table-column prop="Name" label="组织名称" align="center" width="150"></el-table-column>
+      <el-table-column prop="TypeName" label="类型" align="center" width="150"></el-table-column>
       <el-table-column prop="Telephone" label="电话号码" align="center"></el-table-column>
       <el-table-column prop="Fax" label="传真" align="center"></el-table-column>
       <el-table-column prop="Email" label="邮箱" align="center"></el-table-column>
@@ -56,7 +57,7 @@ export default {
   data() {
     return {
       currentId: '',
-      departments: [],
+      list: [],
       dialogFormVisible: false,
       tabValue: 'info',
       queryData: {}
@@ -64,8 +65,8 @@ export default {
   },
   methods: {
     query() {
-      this.$api.department.query(this.queryData).then((res) => {
-        this.departments = res.Data;
+      this.$api.organization.query(this.queryData).then((res) => {
+        this.list = res.Data;
       });
     },
     modify(id) {
@@ -82,22 +83,22 @@ export default {
       if (!this.$refs.infoview.isValid()) {
         return;
       }
-      let department = this.$refs.infoview.department;
-      let departmentRoles = this.$refs.roleview.departmentRoles;
+      let organization = this.$refs.infoview.organization;
+      let organizationRoles = this.$refs.roleview.organizationRoles;
       let roleIds = [];
-      departmentRoles.forEach(item => {
+      organizationRoles.forEach(item => {
         roleIds.push(item.Id)
       })
       let privilege = this.$refs.privilegeview.getPrivilege();
       let data = {
-        Department: department,
+        Organization: organization,
         RoleIds: roleIds,
         ModuleIds: privilege.ModuleIds,
         OperateIds: privilege.OperateIds,
       }
       if (this.currentId) {
         data.Id = this.currentId;
-        this.$api.department.modify(data).then(res => {
+        this.$api.organization.modify(data).then(res => {
           this.$message({
             showClose: true,
             message: '修改成功',
@@ -107,7 +108,7 @@ export default {
           this.query();
         })
       } else {
-        this.$api.department.add(data).then(res => {
+        this.$api.organization.add(data).then(res => {
           this.$message({
             showClose: true,
             message: '添加成功',

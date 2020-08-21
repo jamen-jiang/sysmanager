@@ -29,8 +29,22 @@ const common = {
       method: 'get',
     });
   },
-  getDepartments() {
-    let url = '/Common/GetDepartments';
+  getOrganizations() {
+    let url = '/Common/GetOrganizations';
+    return request({
+      url: url,
+      method: 'get',
+    });
+  },
+  getDictionaryCategorys() {
+    let url = '/Common/GetDictionaryCategorys';
+    return request({
+      url: url,
+      method: 'get',
+    });
+  },
+  getOrganizationTypes() {
+    let url = '/Common/GetOrganizationTypes';
     return request({
       url: url,
       method: 'get',

@@ -1,31 +1,37 @@
 <template>
   <div>
-    <el-form :model="department" ref="department" :rules="rules">
-      <el-form-item label="部门组" prop="PId" :label-width="formLabelWidth">
+    <el-form :model="organization" ref="organization" :rules="rules">
+      <el-form-item label="组织组" prop="PId" :label-width="formLabelWidth">
         <el-select ref="pidsel" v-model="selectedName" placeholder="请选择" :disabled='isFirst'>
-          <el-option :value="department.PId" :label="selectedName" style="height: auto">
-            <el-tree :data="departments" default-expand-all check-strictly :expand-on-click-node='false' node-key="Id" ref="tree" highlight-current :props="defaultProps" @node-click="setSelectValue"></el-tree>
+          <el-option :value="organization.PId" :label="selectedName" style="height: auto">
+            <el-tree :data="organizations" default-expand-all check-strictly :expand-on-click-node='false' node-key="Id" ref="tree" highlight-current :props="defaultProps" @node-click="setSelectValue"></el-tree>
           </el-option>
         </el-select>
-        &nbsp;<el-checkbox v-model="isFirst" label="是否顶级部门" border @change='firstChange'></el-checkbox>
+        &nbsp;<el-checkbox v-model="isFirst" label="是否顶级组织" border @change='firstChange'></el-checkbox>
       </el-form-item>
-      <el-form-item label="部门名称" :label-width="formLabelWidth" prop="Name">
-        <el-input v-model="department.Name" autocomplete="off"></el-input>
+      <el-form-item label="类型" :label-width="formLabelWidth" prop="Type">
+        <el-select v-model="organization.Type" placeholder="请选择">
+          <el-option v-for="item in organizationTypes" :key="item.Value" :label="item.Name" :value="item.Value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="组织名称" :label-width="formLabelWidth" prop="Name">
+        <el-input v-model="organization.Name" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="电话号码" :label-width="formLabelWidth" prop="Telephone">
-        <el-input v-model="department.Telephone" autocomplete="off"></el-input>
+        <el-input v-model="organization.Telephone" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="传真" :label-width="formLabelWidth" prop="Fax">
-        <el-input v-model="department.Fax" autocomplete="off"></el-input>
+        <el-input v-model="organization.Fax" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="邮箱" :label-width="formLabelWidth" prop="Email">
-        <el-input v-model="department.Email" autocomplete="off"></el-input>
+        <el-input v-model="organization.Email" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="排序" :label-width="formLabelWidth" prop="Sort">
-        <el-input v-model="department.Sort" autocomplete="off"></el-input>
+        <el-input v-model="organization.Sort" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="备注" :label-width="formLabelWidth" prop="Remark">
-        <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="department.Remark"></el-input>
+        <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="organization.Remark"></el-input>
       </el-form-item>
     </el-form>
   </div>
@@ -41,12 +47,14 @@ export default {
   },
   data() {
     return {
-      department: {
+      organization: {
       },
-      departments: [],
-      formLabelWidth: "100px",
+      organizationTypes: [],
+      organizations: [],
+      formLabelWidth: "110px",
       rules: {
         Name: [{ required: true, message: "请输入部门名称", trigger: "blur" }],
+        Type: [{ required: true, message: "请选择类型", trigger: "blur" }],
       },
       defaultProps: {
         children: "Children",
@@ -61,34 +69,41 @@ export default {
       var params = {
         Id: this.id
       }
-      this.$api.department.detail(params).then(res => {
-        this.department = res.Data;
-        if (!this.department.PId) {
+      this.$api.organization.detail(params).then(res => {
+        this.organization = res.Data;
+        if (!this.organization.PId) {
           this.isFirst = true;
           return
         }
-        var node = this.$refs.tree.getNode(this.department.PId)
+        var node = this.$refs.tree.getNode(this.organization.PId)
         this.selectedId = node.key;
         this.selectedName = node.label;
         // console.log(this.valueTitle)
         this.$refs.tree.setCurrentKey(this.selectedId)
       })
     },
-    getDepartments() {
-      this.$api.common.getDepartments().then(res => {
-        this.departments = res.Data;
+    getOrganizationTypes() {
+      this.$api.common.getOrganizationTypes().then(res => {
+        debugger
+        this.organizationTypes = res.Data;
         if (this.id) {
           this.detail();
         }
       });
     },
+    getOrganizations() {
+      this.$api.common.getOrganizations().then(res => {
+        this.organizations = res.Data;
+        this.getOrganizationTypes();
+      });
+    },
     firstChange(vaule) {
       if (vaule)
-        this.department.PId = null;
+        this.organization.PId = null;
     },
     isValid() {
       let flag = true;
-      this.$refs['department'].validate(valid => {
+      this.$refs['organization'].validate(valid => {
         if (!valid) {
           flag = false;
         }
@@ -96,7 +111,7 @@ export default {
       return flag;
     },
     setSelectValue(data, node) {
-      this.department.PId = node.key
+      this.organization.PId = node.key
       this.selectedName = data.Name
       this.$refs.pidsel.blur();
       //let res = this.$refs.tree.getCheckedNodes(false, true); //true，1. 是否只是叶子节点 2.选择的时候不包含父节点）
@@ -123,7 +138,7 @@ export default {
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
   mounted() {
     //this.$refs.module.resetFields();
-    this.getDepartments();
+    this.getOrganizations();
   },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
   beforeUpdate() {

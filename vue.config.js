@@ -10,7 +10,7 @@ module.exports = {
     port: 8081, // 端口号
     proxy: {
       '/apis': {
-        target: 'https://localhost:5000',
+        target: 'http://localhost:5000',
         changeOrigin: true,
         ws: true,
         pathRewrite: {

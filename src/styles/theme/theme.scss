@@ -54,6 +54,12 @@
     }
   }
   .jyz-header {
+    .jyz-header-right-user {
+      &:hover {
+        color: $theme-header-item-color-hover;
+        background: $theme-header-item-background-color-hover;
+      }
+    }
     .el-menu {
       .el-menu-item {
         transition: border-top-color 0s;

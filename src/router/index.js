@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import layout from '../layout';
 import login from '../views/login.vue';
+import profile from '../views/system/profile/index.vue';
 
 Vue.use(Router);
 const originalPush = Router.prototype.push;
@@ -15,7 +16,13 @@ export default new Router({
       path: '/',
       name: '首页',
       component: layout,
-      children: [],
+      children: [
+        {
+          path: '/system/profile/index',
+          name: '个人中心',
+          component: profile,
+        },
+      ],
     },
     {
       path: '/login',

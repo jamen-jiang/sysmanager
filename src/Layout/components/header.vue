@@ -3,7 +3,7 @@
     <div class="logo-group">
       <img src="../../assets/logo.png" style="height: 60px;" />
     </div>
-    <div class="toggle-btn" @click="toggle">
+    <!-- <div class="toggle-btn" @click="toggle">
       <i class="iconfont icon-bars"></i>
     </div>
     <el-menu mode="horizontal">
@@ -12,7 +12,21 @@
         <i :class="m.Icon"></i>
         <span slot="title">{{m.Name}}</span>
       </el-menu-item>
-    </el-menu>
+    </el-menu> -->
+    <div class="jyz-header-right">
+      <el-dropdown trigger="click">
+        <div class="jyz-header-right-user">
+          <jyz-avatar :src="user.Avatar"></jyz-avatar>
+          <p>{{user.Name}}</p>
+        </div>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item>
+            <router-link to='/system/profile/index'>个人中心</router-link>
+          </el-dropdown-item>
+          <el-dropdown-item>退出登录</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </div>
   </el-header>
 </template>
 
@@ -24,6 +38,7 @@ export default {
   data() {
     return {
       menuTree: [],
+      avatarUrl: require("@/assets/avatar.png")
     };
   },
   methods: {
@@ -52,6 +67,7 @@ export default {
     ...mapState({
       modules: state => state.privilege.modules,
       isCollapse: state => state.privilege.isCollapse,
+      user: state => state.user.current
     })
   },
   //实例刚在内存中被创建出来,此时,还没有初始化好 data 和 methods 属性
@@ -61,7 +77,8 @@ export default {
   //此时已经完成了模板的编译,但是还没有挂载到页面中
   beforeMount() { },
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
-  mounted() { },
+  mounted() {
+  },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
   beforeUpdate() { },
   //实例更新完毕之后调用此函数,此时 data 中的状态值 和 界面上显示的数据,都已经完成了更新,界面已经被重新渲染好了!

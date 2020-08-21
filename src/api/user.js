@@ -61,8 +61,8 @@ const user = {
       params,
     });
   },
-  getDepartments(data) {
-    let url = '/User/GetDepartments';
+  getOrganizations(data) {
+    let url = '/User/GetOrganizations';
     return request({
       url: url,
       method: 'post',
@@ -76,6 +76,13 @@ const user = {
       url: url,
       method: 'post',
       data,
+    });
+  },
+  getUserInfo() {
+    let url = '/User/GetInformation';
+    return request({
+      url: url,
+      method: 'get',
     });
   },
 };

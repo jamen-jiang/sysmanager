@@ -15,7 +15,7 @@
       <p>已选角色:</p>
       <el-card>
         <div class="selected">
-          <el-tag :key="role.Id" v-for="(role,index) in departmentRoles" size="small" closable @close="removeRole(index)">
+          <el-tag :key="role.Id" v-for="(role,index) in organizationRoles" size="small" closable @close="removeRole(index)">
             {{role.Name}}
           </el-tag>
         </div>
@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       roles: [],
-      departmentRoles: [],
+      organizationRoles: [],
       pageIndex: 1,
       pageSize: 5,
       totalCount: 0,
@@ -50,19 +50,19 @@ export default {
         pageIndex: this.pageIndex,
         pageSize: this.pageSize
       }
-      this.$api.department.getRoles(data).then(res => {
+      this.$api.organization.getRoles(data).then(res => {
         this.roles = res.Data.List;
         this.totalCount = res.Data.TotalCount;
         if (this.id)
-          this.getDepartmentRoles();
+          this.getOrganizationRoles();
       });
     },
-    getDepartmentRoles() {
+    getOrganizationRoles() {
       var params = {
         id: this.id,
       }
-      this.$api.department.getDepartmentRoles(params).then(res => {
-        this.departmentRoles = res.Data;
+      this.$api.organization.getOrganizationRoles(params).then(res => {
+        this.organizationRoles = res.Data;
       });
     },
     sizeChange(val) {
@@ -75,17 +75,17 @@ export default {
     },
     selected(role) {
       let flag = true;
-      for (let i in this.departmentRoles) {
-        if (role.Id == this.departmentRoles[i].Id) {
+      for (let i in this.organizationRoles) {
+        if (role.Id == this.organizationRoles[i].Id) {
           flag = false;
           return;
         }
       }
       if (flag)
-        this.departmentRoles.push(role);
+        this.organizationRoles.push(role);
     },
     removeRole(index) {
-      this.departmentRoles.splice(index, 1);
+      this.organizationRoles.splice(index, 1);
     }
   },
   components: {

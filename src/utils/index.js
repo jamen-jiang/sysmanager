@@ -31,4 +31,34 @@ const setRouter = modules => {
     router.addRoutes(router.options.routes);
   }
 };
-export { setRouter };
+const getCurrentAndParent = (list, outList, obj) => {
+  var model = {
+    Id: obj.Id,
+    Name: obj.Name,
+  };
+  outList.push(model);
+  let parent = {};
+  for (var i in list) {
+    if (list[i].Id == obj.PId) {
+      parent = list[i];
+      break;
+    }
+  }
+  if (Object.keys(parent).length > 0) {
+    getCurrentAndParent(list, outList, parent);
+  }
+};
+const treeToList = (tree, outList) => {
+  tree.forEach(node => {
+    let model = {
+      Id: node.Id,
+      PId: node.PId,
+      Name: node.Name,
+    };
+    outList.push(model);
+    if (node.Children.length > 0) {
+      treeToList(node.Children, outList);
+    }
+  });
+};
+export { setRouter, getCurrentAndParent, treeToList };

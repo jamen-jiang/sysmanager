@@ -16,6 +16,13 @@ body,
   -moz-osx-font-smoothing: grayscale;
   font-size: 12px;
 }
+a,
+a:focus,
+a:hover {
+  cursor: pointer;
+  color: inherit;
+  text-decoration: none;
+}
 p {
   padding: 0px;
   margin: 0px;
@@ -72,6 +79,29 @@ p {
     }
     .toggle-btn:hover i {
       color: #409eff !important;
+    }
+    .jyz-header-right {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      .el-dropdown {
+        height: 100%;
+        display: flex;
+        .jyz-header-right-user {
+          display: flex;
+          align-items: center;
+          padding: 0px 5px;
+          cursor: pointer;
+          .el-avatar {
+            background-color: #fff;
+          }
+          p {
+            margin-left: 8px;
+          }
+        }
+      }
     }
   }
   .jyz-middle {

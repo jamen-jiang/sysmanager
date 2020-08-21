@@ -1,9 +1,9 @@
 import request from '@/utils/request';
 
-const department = {
+const organization = {
   // 部门列表
   query(data) {
-    let url = '/Department/Query';
+    let url = '/Organization/Query';
     return request({
       url: url,
       method: 'post',
@@ -11,7 +11,7 @@ const department = {
     });
   },
   detail(params) {
-    let url = '/Department/Detail';
+    let url = '/Organization/Detail';
     return request({
       url: url,
       method: 'get',
@@ -19,14 +19,14 @@ const department = {
     });
   },
   getModuleOperates() {
-    let url = '/Department/GetModuleOperates';
+    let url = '/Organization/GetModuleOperates';
     return request({
       url: url,
       method: 'get',
     });
   },
   getAuthorizeModuleOperateIds(params) {
-    let url = '/Department/getAuthorizeModuleOperateIds';
+    let url = '/Organization/getAuthorizeModuleOperateIds';
     return request({
       url: url,
       method: 'get',
@@ -34,15 +34,15 @@ const department = {
     });
   },
   getRoles(data) {
-    let url = '/Department/GetRoles';
+    let url = '/Organization/GetRoles';
     return request({
       url: url,
       method: 'Post',
       data,
     });
   },
-  getDepartmentRoles(params) {
-    let url = '/Department/GetDepartmentRoles';
+  getOrganizationRoles(params) {
+    let url = '/Organization/GetOrganizationRoles';
     return request({
       url: url,
       method: 'get',
@@ -50,7 +50,7 @@ const department = {
     });
   },
   modify(data) {
-    let url = '/Department/Modify';
+    let url = '/Organization/Modify';
     return request({
       url: url,
       method: 'post',
@@ -58,7 +58,7 @@ const department = {
     });
   },
   add(data) {
-    let url = '/Department/Add';
+    let url = '/Organization/Add';
     return request({
       url: url,
       method: 'post',
@@ -66,4 +66,4 @@ const department = {
     });
   },
 };
-export default department;
+export default organization;

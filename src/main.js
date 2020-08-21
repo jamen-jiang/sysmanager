@@ -32,6 +32,11 @@ router.beforeEach((to, from, next) => {
         path: '/login',
       });
     } else {
+      if (Object.keys(store.state.user.current) <= 0) {
+        api.user.getUserInfo().then(res => {
+          store.commit('user/user_set', res.Data);
+        });
+      }
       //动态生成路由
       if (store.state.privilege.modules.length <= 0) {
         api.privilege.getAuthorizeModuleOperates().then(res => {

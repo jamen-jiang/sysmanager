@@ -21,11 +21,20 @@
         </el-form-item>
       </el-form>
     </div>
-    <el-tree node-key="Id" :data="departments" :props="treeProps" @node-click='nodeClick' default-expand-all :expand-on-click-node='false' ref="tree" slot="aside"></el-tree>
+    <el-tree node-key="Id" :data="organizations" :props="treeProps" @node-click='nodeClick' default-expand-all :expand-on-click-node='false' ref="tree" slot="aside" highlight-current></el-tree>
     <el-table :data="users" row-key="Id" height='100%'>
       <el-table-column prop="UserName" label="登录账号"></el-table-column>
       <el-table-column prop="Name" label="姓名"></el-table-column>
-      <el-table-column prop="DepartmentName" label="部门"></el-table-column>
+      <el-table-column prop="OrganizationNames" label="组织机构">
+        <template slot-scope="scope">
+          <div>
+            <el-tag v-for="item in scope.row.OrganizationNames" :key="item" type="warning" effect="dark">
+              {{ item }}
+            </el-tag>
+          </div>
+
+        </template>
+      </el-table-column>
       <el-table-column prop="Remark" label="备注"></el-table-column>
       <el-table-column prop="CreatedOn" label="创建日期"></el-table-column>
       <el-table-column prop="CreatedByName" label="创建人"></el-table-column>
@@ -65,8 +74,8 @@ export default {
   props: {},
   data() {
     return {
-      departments: [],
-      department: {},
+      organizations: [],
+      organization: {},
       users: [],
       currentId: '',
       dialogFormVisible: false,
@@ -98,14 +107,14 @@ export default {
     };
   },
   methods: {
-    getDepartments() {
-      this.$api.user.getDepartments({}).then(res => {
-        this.departments = res.Data;
+    getOrganizations() {
+      this.$api.user.getOrganizations({}).then(res => {
+        this.organizations = res.Data;
         this.query();
       })
     },
     query() {
-      this.queryData.DepartmentId = this.department.Id;
+      this.queryData.OrganizationId = this.organization.Id;
       var params = {
         pageIndex: this.pageIndex,
         pageSize: this.pageSize,
@@ -164,7 +173,7 @@ export default {
       this.query();
     },
     nodeClick(data, node) {
-      this.department = node.data;
+      this.organization = node.data;
       this.query();
     }
   },
@@ -180,7 +189,7 @@ export default {
   beforeMount() { },
   //此时,已经将编译好的模板,挂载到了页面指定的容器中显示
   mounted() {
-    this.getDepartments();
+    this.getOrganizations();
   },
   //状态更新之前执行此函数,此时 data 中的状态值是最新的,但是界面上显示的 数据还是旧的,因为此时还没有开始重新渲染DOM节点
   beforeUpdate() { },
@@ -196,5 +205,12 @@ export default {
 <style lang='scss'scoped>
 .el-dialog {
   width: 500px;
+}
+.el-tag {
+  white-space: normal;
+  height: auto;
+  line-height: normal;
+  padding: 5px;
+  margin: 2px;
 }
 </style>

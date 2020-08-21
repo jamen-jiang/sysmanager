@@ -70,7 +70,6 @@ export default {
     getOperateTypes() {
       this.$api.common.getOperateTypes().then(res => {
         this.operateTypes = res.Data;
-
       });
     },
     getModules() {

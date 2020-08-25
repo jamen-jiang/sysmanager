@@ -3,7 +3,6 @@
     <el-card class="box-card jyz-profile-left">
       <div slot="header" class="clearfix">
         <span>个人信息</span>
-        <el-button style="float: right; padding: 3px 0" type="text">编辑</el-button>
       </div>
       <div class="jyz-profile-left-info">
         <div class="jyz-profile-left-info-header">
@@ -11,22 +10,44 @@
           <p>{{user.Name}}</p>
         </div>
         <div class="jyz-profile-left-info-bottom">
-          <p>职位</p>
-          <p>部门:中国基建-土木工程－事业部－搬砖组</p>
-          <p>性别:男</p>
-          <p>手机:jyz@jyz.com</p>
-          <p>邮箱:jyz@jyz.com</p>
-          <p>入职时间:1991-10-04</p>
+          <div>
+            <span>组织机构:</span>
+            <div>
+              <el-tag v-for="item in user.OrganizationNames" :key="item" type="warning" effect="dark">
+                {{ item }}
+              </el-tag>
+            </div>
+          </div>
+          <div>
+            <span>角色:</span>
+            <div>
+              <el-tag v-for="item in user.RoleNames" :key="item" type="primary" effect="dark">
+                {{ item }}
+              </el-tag>
+            </div>
+          </div>
+          <div>
+            <span>性别:</span>
+            <div>{{user.GenderName}}</div>
+          </div>
+          <div>
+            <span>手机:</span>
+            <div> {{user.MobilePhone}}</div>
+          </div>
+          <div>
+            <span>邮箱:</span>
+            <div> {{user.Email}}</div>
+          </div>
         </div>
       </div>
     </el-card>
     <el-card class="box-card jyz-profile-right">
       <el-tabs value="info">
         <el-tab-pane label="基本设置" name="info">
-          配置
+          <infoview ref="infoview" :id='user.Id'></infoview>
         </el-tab-pane>
         <el-tab-pane label="修改密码" name="changepassword">
-          配置
+          <changepasswordview ref="changepasswordview" :id='user.Id'></changepasswordview>
         </el-tab-pane>
       </el-tabs>
     </el-card>
@@ -35,6 +56,7 @@
 
 <script>
 import { mapState } from "vuex";
+import { infoview, changepasswordview } from './components'
 export default {
   props: {
 
@@ -48,7 +70,7 @@ export default {
 
   },
   components: {
-
+    infoview, changepasswordview
   },
   computed: {
     ...mapState({
@@ -120,8 +142,26 @@ export default {
         display: flex;
         flex-direction: column;
         width: 100%;
-        p {
+        & > div {
+          display: flex;
           margin: 8px 0px;
+          & > span {
+            width: 80px;
+            margin-right: 10px;
+            text-align: right;
+          }
+          & > div {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+          }
+          .el-tag {
+            white-space: normal;
+            height: auto;
+            line-height: normal;
+            padding: 5px;
+            margin: 2px;
+          }
         }
       }
     }

@@ -18,7 +18,7 @@ export default {
   },
   data() {
     return {
-      avatarUrl: require("@/assets/avatar.png")
+      avatarUrl: require("@/assets/avatar.jpg")
     };
   },
   methods: {

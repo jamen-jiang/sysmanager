@@ -11,7 +11,13 @@ const user = {
     });
   },
   // 登出
-  logout() {},
+  logout() {
+    let url = '/user/logout';
+    return request({
+      url: url,
+      method: 'get',
+    });
+  },
   // 用户列表列表
   query(data) {
     let url = '/User/Query';
@@ -72,6 +78,22 @@ const user = {
   // 修改用户信息
   modify(data) {
     let url = '/User/Modify';
+    return request({
+      url: url,
+      method: 'post',
+      data,
+    });
+  },
+  modifyProfile(data) {
+    let url = '/User/ModifyProfile';
+    return request({
+      url: url,
+      method: 'post',
+      data,
+    });
+  },
+  changePassWord(data) {
+    let url = '/User/ChangePassWord';
     return request({
       url: url,
       method: 'post',

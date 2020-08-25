@@ -1,7 +1,8 @@
 <template>
   <el-header id="header">
     <div class="logo-group">
-      <img src="../../assets/logo.png" style="height: 60px;" />
+      <img src="../../assets/logo.png" style="height: 45px;" />
+      <span>JYZ后台管理系统</span>
     </div>
     <!-- <div class="toggle-btn" @click="toggle">
       <i class="iconfont icon-bars"></i>
@@ -14,7 +15,7 @@
       </el-menu-item>
     </el-menu> -->
     <div class="jyz-header-right">
-      <el-dropdown trigger="click">
+      <el-dropdown trigger="click" @command="handleCommand">
         <div class="jyz-header-right-user">
           <jyz-avatar :src="user.Avatar"></jyz-avatar>
           <p>{{user.Name}}</p>
@@ -23,7 +24,7 @@
           <el-dropdown-item>
             <router-link to='/system/profile/index'>个人中心</router-link>
           </el-dropdown-item>
-          <el-dropdown-item>退出登录</el-dropdown-item>
+          <el-dropdown-item command="logout">退出登录</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -31,6 +32,7 @@
 </template>
 
 <script>
+import Cookies from 'js-cookie';
 import { mapState } from "vuex";
 export default {
   name: 'JyzHeader',
@@ -38,10 +40,22 @@ export default {
   data() {
     return {
       menuTree: [],
-      avatarUrl: require("@/assets/avatar.png")
+      avatarUrl: require("@/assets/avatar.jpg")
     };
   },
   methods: {
+    handleCommand(command) {
+      if (command == 'logout') {
+        this.logout();
+      }
+    },
+    logout() {
+      this.$api.user.logout().then(res => {
+        Cookies.remove('token');
+        this.$router.push({ path: '/login' })
+      });
+
+    },
     // select(id) {
     //   this.menuTree = [];
     //   this.menus.forEach(m => {

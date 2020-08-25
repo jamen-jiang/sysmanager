@@ -15,7 +15,8 @@
       </el-form>
     </div>
     <el-table :data="logOperates" row-key="Id" height='100%'>
-      <el-table-column prop="ApiName" label="操作名称"></el-table-column>
+      <el-table-column prop="ApiName" label="模块名称"></el-table-column>
+      <el-table-column prop="Type" label="操作名称"></el-table-column>
       <el-table-column prop="ApiUrl" label="操作接口"></el-table-column>
       <el-table-column prop="UserName" label="操作用户"></el-table-column>
       <el-table-column prop="LogOn" label="操作日期"></el-table-column>

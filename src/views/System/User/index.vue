@@ -25,16 +25,18 @@
     <el-table :data="users" row-key="Id" height='100%'>
       <el-table-column prop="UserName" label="登录账号"></el-table-column>
       <el-table-column prop="Name" label="姓名"></el-table-column>
-      <el-table-column prop="OrganizationNames" label="组织机构">
+      <el-table-column prop="OrganizationNames" label="组织机构" width="200">
         <template slot-scope="scope">
           <div>
             <el-tag v-for="item in scope.row.OrganizationNames" :key="item" type="warning" effect="dark">
               {{ item }}
             </el-tag>
           </div>
-
         </template>
       </el-table-column>
+      <el-table-column prop="MobilePhone" label="手机号码"></el-table-column>
+      <el-table-column prop="Email" label="邮箱"></el-table-column>
+      <el-table-column prop="GenderName" label="性别"></el-table-column>
       <el-table-column prop="Remark" label="备注"></el-table-column>
       <el-table-column prop="CreatedOn" label="创建日期"></el-table-column>
       <el-table-column prop="CreatedByName" label="创建人"></el-table-column>

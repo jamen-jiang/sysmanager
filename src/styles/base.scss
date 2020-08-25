@@ -63,7 +63,13 @@ p {
     }
     .logo-group {
       width: 200px;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      span {
+        margin-left: 10px;
+        color: #606266;
+      }
     }
     .toggle-btn {
       height: 60px;

@@ -11,20 +11,22 @@
 </template>
 
 <script>
-import { JyzHeader, JyzLefter, JyzMain, JyzFooter } from "./components";
+import { JyzHeader, JyzLefter, JyzMain, JyzFooter } from './components';
 export default {
   props: {},
   data() {
     return {};
   },
   computed: {},
-  created() { },
-  mounted() {
-  },
+  created() {},
+  mounted() {},
   watch: {},
   methods: {},
   components: {
-    JyzHeader, JyzLefter, JyzMain, JyzFooter
+    JyzHeader,
+    JyzLefter,
+    JyzMain,
+    JyzFooter,
   },
 };
 </script>
